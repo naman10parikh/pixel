@@ -1,17 +1,19 @@
 #!/bin/bash
-# memory-search.sh — Search across Energy's memory system with relevance scoring
+# memory-search.sh — pixel's queryable Memory layer: BM25 search over the EXPERTISE BRAIN.
 # Usage: ./scripts/memory-search.sh "query" [--limit N] [--verbose]
 #
-# Searches: LEARNINGS.md, daily/*.md, topics/*.md, vault/*.md, rules/*.md
-# Scoring: term frequency x recency x source weight
-# Returns: top N results (default 5) with file path + surrounding context
+# Searches the six brain/*.md files (pixel's competence — NOT git/code history):
+#   EXPERTISE-MAP, BATTLE-TESTED-SCENARIOS, KNOWN-PITFALLS, OPINIONS,
+#   GAPS-AND-DISPUTES, TOOL-MATRIX (+ the MOC and any ORG_* notes).
+# Scoring: term frequency x recency x source weight (BM25-style)
+# Returns: top N results (default 5) with file path + surrounding context.
+# This is the same layer the obsidian MCP (VAULT_PATH=./brain) and the
+# pixel_brain_search MCP verb expose. Mirrors HARNESS-OVERRIDES Memory ✅.
 
 set -euo pipefail
 
 PROJECT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
-MEMORY_DIR="$PROJECT_DIR/memory"
-VAULT_DIR="$PROJECT_DIR/vault"
-RULES_DIR="$PROJECT_DIR/.claude/rules"
+BRAIN_DIR="$PROJECT_DIR/brain"
 
 # Parse arguments
 QUERY=""
@@ -31,12 +33,14 @@ while [[ $# -gt 0 ]]; do
     --help|-h)
       echo "Usage: memory-search.sh \"query\" [--limit N] [--verbose]"
       echo ""
-      echo "Searches across Energy's memory system:"
-      echo "  - memory/LEARNINGS.md (learnings & patterns)"
-      echo "  - memory/daily/*.md (session logs)"
-      echo "  - memory/topics/*.md (permanent topic files)"
-      echo "  - vault/*.md (Obsidian notes)"
-      echo "  - .claude/rules/*.md (hard rules)"
+      echo "pixel's queryable Memory layer — BM25 over the expertise brain (brain/*.md):"
+      echo "  - brain/EXPERTISE-MAP.md (the 8-job pixel loop)"
+      echo "  - brain/BATTLE-TESTED-SCENARIOS.md (S1-S20 golden scenarios)"
+      echo "  - brain/KNOWN-PITFALLS.md (the silent-failure grep-set + version gotchas)"
+      echo "  - brain/OPINIONS.md (the always-X/never-Y taste stances)"
+      echo "  - brain/GAPS-AND-DISPUTES.md (where sources disagree)"
+      echo "  - brain/TOOL-MATRIX.md (default vs alts + ecosystem watch)"
+      echo "  - brain/MOC - pixel.md, brain/ORG_*.md (hub + org context)"
       echo ""
       echo "Options:"
       echo "  --limit N    Return top N results (default: 5)"
@@ -63,16 +67,19 @@ IFS=' ' read -ra TERMS <<< "$QUERY"
 RESULTS_FILE=$(mktemp)
 trap "rm -f $RESULTS_FILE" EXIT
 
-# Source weight map (higher = more authoritative)
+# Source weight map (higher = more authoritative). pixel ranks the named-stance
+# brain files highest — they carry the version-keyed gotchas + golden scenarios.
 weight_for_source() {
   local file="$1"
   case "$file" in
-    */.claude/rules/*)   echo 5 ;;  # Rules are highest priority
-    */memory/LEARNINGS*) echo 4 ;;  # Learnings are core knowledge
-    */memory/topics/*)   echo 4 ;;  # Topic files are curated
-    */memory/daily/*)    echo 3 ;;  # Daily logs are session-scoped
-    */vault/*)           echo 2 ;;  # Vault is navigation layer
-    *)                   echo 1 ;;
+    */brain/KNOWN-PITFALLS.md)          echo 5 ;;  # the silent-failure grep-set + gotchas
+    */brain/BATTLE-TESTED-SCENARIOS.md) echo 5 ;;  # S1-S20 golden scenarios (the evidence)
+    */brain/OPINIONS.md)                echo 4 ;;  # the taste stances (always-X/never-Y)
+    */brain/EXPERTISE-MAP.md)           echo 4 ;;  # the 8-job loop
+    */brain/TOOL-MATRIX.md)             echo 3 ;;  # default vs alts + ecosystem watch
+    */brain/GAPS-AND-DISPUTES.md)       echo 3 ;;  # where sources disagree
+    */brain/*)                          echo 2 ;;  # MOC, ORG_* context notes
+    *)                                  echo 1 ;;
   esac
 }
 
@@ -162,34 +169,11 @@ extract_context() {
   fi
 }
 
-# Build file list to search
+# Build file list to search — the expertise BRAIN (brain/*.md), not code/git history.
 FILES=()
 
-# LEARNINGS.md
-[ -f "$MEMORY_DIR/LEARNINGS.md" ] && FILES+=("$MEMORY_DIR/LEARNINGS.md")
-
-# Daily logs
-for f in "$MEMORY_DIR"/daily/*.md; do
-  [ -f "$f" ] && FILES+=("$f")
-done
-
-# Topic files
-for f in "$MEMORY_DIR"/topics/*.md; do
-  [ -f "$f" ] && FILES+=("$f")
-done
-
-# Vault notes
-for f in "$VAULT_DIR"/*.md; do
-  [ -f "$f" ] && FILES+=("$f")
-done
-
-# Rules
-for f in "$RULES_DIR"/*.md; do
-  [ -f "$f" ] && FILES+=("$f")
-done
-
-# Archive (lower priority but still searchable)
-for f in "$MEMORY_DIR"/archive/*.md; do
+# The six Wave-R brain files + the MOC + any ORG_* context notes.
+for f in "$BRAIN_DIR"/*.md; do
   [ -f "$f" ] && FILES+=("$f")
 done
 
