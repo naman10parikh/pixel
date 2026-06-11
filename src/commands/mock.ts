@@ -1,40 +1,29 @@
-// src/commands/mock.ts — STUB (B8 wires the parser; the real pipeline is D14).
-// `pixel mock` is THE flagship: discover → generate → gate → emit, logged per step. D14
-// (cluster D, separate stream) implements src/lib/pipeline.ts and replaces this body. Until
-// then this stub does NOT fake success — it logs the invocation and exits non-zero so nothing
-// downstream mistakes it for a working pipeline. The brief gate (NO BRIEF = NO DESIGN, O11) is
-// honored here so even the stub refuses an empty brief, matching the chaos-2 contract.
+// src/commands/mock.ts — `pixel mock "<brief>"` (D14, THE flagship / D9 bar).
+// The flagship verb: discovery brief → first-pass draft → 7-step gate → ICP-aware mockup +
+// scaffolded Next 16 app under --out. The real routing flow lives in src/lib/pipeline.ts (each of
+// the 4 steps logs its own `step` line); this command is the thin CLI adapter. It REFUSES an empty
+// brief (NO BRIEF = NO DESIGN, O11, exit 2) and exits non-zero if the ship gate hard-fails (the
+// emitted UI is an untrusted draft until it passes anti-slop, O7). The B8 parser calls this.
 
-import chalk from "chalk";
-import { logRun, startTimer } from "../lib/logger.js";
+import { runMockPipeline } from "../lib/pipeline.js";
 
 export async function runMock(
   brief: string,
   opts: { out?: string; sandbox?: boolean; json?: boolean },
 ): Promise<number> {
-  const elapsed = startTimer();
+  // `--no-sandbox` (commander) arrives as opts.sandbox === false; default (undefined) = sandbox on.
+  // The pipeline's gate runs locally when noSandbox is set (the keyless path the acceptance test
+  // proves, E19); the E2B build envelope (E17) is invoked by `pixel audit --sandbox` downstream.
+  const result = await runMockPipeline(brief, { out: opts.out, noSandbox: opts.sandbox === false });
 
-  if (!brief || brief.trim().length === 0) {
-    console.error(chalk.red("pixel mock: NO BRIEF = NO DESIGN — provide a one-line brief naming the ICP (O11)."));
-    logRun({ cmd: "mock", model: null, duration_ms: elapsed(), tool_calls: 0, gate_results: [], exit: 2, brief: "" });
-    return 2;
+  if (opts.json) {
+    process.stdout.write(
+      JSON.stringify(
+        { exit: result.exit, out: result.out, mockup_path: result.mockupPath, app_path: result.appPath, gate: result.gate },
+        null,
+        2,
+      ) + "\n",
+    );
   }
-
-  console.error(
-    chalk.yellow("pixel mock: pipeline not yet wired in this build (owned by cluster D / D14)."),
-  );
-  console.error(chalk.dim("  Run `pixel scaffold`, `pixel design`, then `pixel audit` for the underlying cores (B9)."));
-  logRun({
-    cmd: "mock",
-    model: null,
-    duration_ms: elapsed(),
-    tool_calls: 0,
-    gate_results: [],
-    exit: 1,
-    brief,
-    out: opts.out ?? null,
-    sandbox: opts.sandbox !== false,
-    stub: true,
-  });
-  return 1;
+  return result.exit;
 }
