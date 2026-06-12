@@ -54,3 +54,34 @@ jobs:
       - name: Skeleton phase
         if: steps.rt.outputs.armed == 'false'
         run: echo "skeleton phase — build gate auto-arms when package.json lands (CP123 Wave B)"
+
+  # ── THE ACCEPTANCE TEST (E19 / D9 bar / PLAN §5) — red-blocking, the #1 fleet-gap lesson. ──────
+  # `pixel mock "<brief>"` (V0_API_KEY UNSET → keyless R2 scaffold path) → an ICP-aware mockup +
+  # a scaffolded Next 16 app, then `impeccable detect` exits 0 (anti-slop, keyless) AND a Playwright
+  # smoke boots the app and asserts a real bg-* computed background (S4) + 0 console hydration
+  # warnings (S8). This proves pixel's moat is the GATE, not the generator (O7). No continue-on-error
+  # → a failure reds the whole run. Needs npm + shadcn-registry egress + a Playwright browser.
+  acceptance:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - name: Install + build pixel
+        run: |
+          pnpm install --frozen-lockfile || pnpm install
+          pnpm build
+      - name: Install a Playwright browser (for the smoke half)
+        run: npx --yes playwright install --with-deps chromium
+      - name: Acceptance test — pixel mock → impeccable-clean + Playwright smoke (KEYLESS, red-blocking)
+        env:
+          # Intentionally NO V0_API_KEY → forces the keyless scaffold fallback (R2) the bar must prove.
+          E2B_API_KEY: ${{ secrets.E2B_API_KEY }}
+        run: node eval/acceptance.mjs --keep
+      - name: Eval pyramid — GT1–GT15 golden tasks (red-blocking on a CI-block FAIL)
+        run: node eval/eval.mjs
