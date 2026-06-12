@@ -1,0 +1,254 @@
+/* pixel cockpit — warm-black OKLCH instrument console (G24 design / G26 anti-slop gate).
+   Built to the SAME bar pixel enforces (HARNESS-OVERRIDES Part C — eats its own dog food):
+   warm-black #141312 (O-HS1, NEVER pure black), ONE amber OKLCH accent (O-HS6 / O-F1 — never the
+   violet prior), asymmetric/bento (O-HS3), a DISTINCTIVE serif display + Poppins body (O-HS2/O-F6).
+   DISPLAY FONT = Spectral, NOT Instrument Serif: impeccable 2.3.2's OVERUSED_FONTS set flags
+   "instrument serif" as the new AI monoculture, and `pixel audit src/cockpit/public` (G26) must
+   pass exit 0 — so we honor the serif+sans PRINCIPLE with a face off the list (same call the
+   `pixel mock` output makes, see src/lib/mockup.ts). No gray placeholder boxes, no cards-in-cards,
+   no AI purple/pink gradients, no rounded-square icon tile above every heading. */
+
+:root {
+  /* ---- warm-black surface ramp (perceptually-uniform OKLCH; #141312 base, O-HS1) ---- */
+  --bg: oklch(0.16 0.006 66);        /* #141312 page — warm black, never #000 */
+  --bg-2: oklch(0.185 0.007 66);     /* recessed sections */
+  --surface-1: oklch(0.205 0.007 66);/* card core */
+  --surface-2: oklch(0.245 0.009 66);/* raised control / hover */
+  --surface-3: oklch(0.285 0.010 66);/* log gutter / code */
+  --hairline: oklch(1 0 0 / 0.10);   /* 1px border */
+  --hairline-2: oklch(1 0 0 / 0.055);/* row divider */
+
+  /* ---- text (warm off-white, high contrast — NOT pure #fff on dark, O-HS5) ---- */
+  --text-hi: oklch(0.975 0.004 66);
+  --text-mid: oklch(0.975 0.004 66 / 0.80);
+  --text-lo: oklch(0.975 0.004 66 / 0.62);
+
+  /* ---- THE one accent moment: warm amber (O-HS6 one-per-page; O-F1 not violet) ---- */
+  --accent: oklch(0.80 0.15 72);
+  --accent-2: oklch(0.86 0.12 84);          /* inline code / secondary highlight */
+  --accent-dim: oklch(0.80 0.15 72 / 0.16); /* active nav, chip bg, focus fill */
+  --accent-ring: oklch(0.80 0.15 72 / 0.5); /* focus ring, hover border */
+
+  /* ---- semantic STATUS palette (the harness PASS/SKIP/FAIL — kept >=30deg off the amber) ---- */
+  --ok: oklch(0.74 0.15 158);   /* PASS / green / exit 0 */
+  --warn: oklch(0.83 0.15 78);  /* SKIP / pending */
+  --err: oklch(0.66 0.20 25);   /* FAIL / non-zero exit */
+  --ok-dim: oklch(0.74 0.15 158 / 0.16);
+  --warn-dim: oklch(0.83 0.15 78 / 0.16);
+  --err-dim: oklch(0.66 0.20 25 / 0.16);
+
+  /* ---- spacing (4px base) · radii (concentric) · motion (sub-300ms ease-out, O-F3) ---- */
+  --s1: 4px; --s2: 8px; --s3: 12px; --s4: 16px; --s5: 24px; --s6: 32px; --s7: 48px; --s8: 64px;
+  --r-sm: 8px; --r-md: 14px; --r-lg: 22px;
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --t-fast: 160ms; --t-mid: 260ms;
+
+  /* ---- type: Spectral DISPLAY register only; Poppins body (O-HS2 / O-F6) ---- */
+  --font-body: "Poppins", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Spectral", ui-serif, Georgia, "Times New Roman", serif;
+  --font-mono: ui-monospace, "SF Mono", Menlo, monospace;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { height: 100%; }
+body {
+  min-height: 100%;
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: 15px;
+  line-height: 1.6;
+  letter-spacing: 0.004em;
+  color: var(--text-hi);
+  background: var(--bg);
+  /* faint warm ambient so panels read layered — single hue, on-brand (not an AI purple glow) */
+  background-image:
+    radial-gradient(820px 560px at 86% -10%, oklch(0.80 0.15 72 / 0.05), transparent 60%),
+    radial-gradient(640px 480px at -6% 112%, oklch(0.80 0.15 72 / 0.03), transparent 55%);
+  background-attachment: fixed;
+  -webkit-font-smoothing: antialiased;
+  font-variant-numeric: tabular-nums; /* O-F7: tabular numbers on changing values */
+}
+
+a { color: inherit; }
+code, .mono { font-family: var(--font-mono); }
+
+/* ---------------------------------------------------------------- masthead --- */
+.masthead {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr; /* asymmetric, O-HS3 */
+  gap: var(--s6);
+  align-items: end;
+  padding: var(--s7) var(--s7) var(--s5);
+  border-bottom: 1px solid var(--hairline);
+}
+.wordmark {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: clamp(2.2rem, 4.5vw, 3.2rem);
+  line-height: 1;
+  letter-spacing: -0.01em;
+}
+.wordmark .dot { color: var(--accent); }
+.tagline { color: var(--text-lo); font-size: 0.95rem; max-width: 52ch; margin-top: var(--s2); }
+.stat-strip { display: flex; gap: var(--s5); justify-content: flex-end; flex-wrap: wrap; }
+.stat { text-align: right; }
+.stat .v { font-family: var(--font-display); font-size: 1.9rem; line-height: 1; color: var(--accent); }
+.stat .k { font-size: 0.72rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-lo); margin-top: var(--s1); }
+
+/* ---------------------------------------------------------------- shell ------ */
+.shell { display: grid; grid-template-columns: 220px 1fr; gap: 0; min-height: 60vh; }
+.rail {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s1);
+  padding: var(--s5) var(--s4);
+  border-right: 1px solid var(--hairline);
+}
+.rail button {
+  display: flex; align-items: center; gap: var(--s3);
+  width: 100%; text-align: left;
+  padding: var(--s3) var(--s4);
+  border: 1px solid transparent;
+  border-radius: var(--r-sm);
+  background: transparent;
+  color: var(--text-mid);
+  font: inherit;
+  cursor: pointer;
+  transition: background var(--t-fast) var(--ease), color var(--t-fast) var(--ease);
+}
+@media (hover: hover) { .rail button:hover { background: var(--surface-1); color: var(--text-hi); } }
+.rail button[aria-current="true"] {
+  background: var(--accent-dim);
+  color: var(--text-hi);
+  border-color: var(--accent-ring);
+}
+.rail .glyph { font-family: var(--font-display); font-style: italic; color: var(--accent); width: 1.1rem; text-align: center; }
+.rail-foot { margin-top: auto; color: var(--text-lo); font-size: 0.78rem; line-height: 1.5; }
+.rail-foot kbd { font-family: var(--font-mono); background: var(--surface-2); padding: 0 var(--s1); border-radius: 4px; }
+
+.stage { padding: var(--s6) var(--s7); }
+.view-title { font-family: var(--font-display); font-weight: 500; font-size: 1.8rem; margin-bottom: var(--s2); }
+.view-sub { color: var(--text-lo); font-size: 0.92rem; margin-bottom: var(--s5); max-width: 70ch; }
+
+/* ---------------------------------------------------------------- panels ----- */
+/* ONE card surface per region (O-HS4 — no cards nested in cards). Hierarchy via type + space. */
+.bento { display: grid; grid-template-columns: repeat(6, 1fr); gap: var(--s4); }
+.panel {
+  background: var(--surface-1);
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-md);
+  padding: var(--s5);
+}
+.panel.wide { grid-column: span 4; }
+.panel.narrow { grid-column: span 2; }
+.panel.full { grid-column: span 6; }
+.panel h3 { font-family: var(--font-display); font-weight: 500; font-size: 1.25rem; margin-bottom: var(--s2); }
+.panel p { color: var(--text-mid); font-size: 0.92rem; }
+.muted { color: var(--text-lo); }
+
+/* status chips — color + a glyph + a label (O / use-of-color: never color alone) */
+.chip { display: inline-flex; align-items: center; gap: var(--s1); font-size: 0.74rem; font-weight: 600; padding: 2px var(--s2); border-radius: 999px; letter-spacing: 0.02em; }
+.chip.ok { background: var(--ok-dim); color: var(--ok); }
+.chip.skip { background: var(--warn-dim); color: var(--warn); }
+.chip.fail { background: var(--err-dim); color: var(--err); }
+
+/* ---------------------------------------------------------------- tables ----- */
+table { width: 100%; border-collapse: collapse; font-size: 0.86rem; }
+th, td { text-align: left; padding: var(--s2) var(--s3); border-bottom: 1px solid var(--hairline-2); vertical-align: top; }
+th { color: var(--text-lo); font-weight: 600; font-size: 0.72rem; letter-spacing: 0.06em; text-transform: uppercase; }
+td.num { font-variant-numeric: tabular-nums; text-align: right; }
+tr:last-child td { border-bottom: none; }
+
+/* ---------------------------------------------------------------- search ----- */
+.searchbar { display: flex; gap: var(--s2); margin-bottom: var(--s5); }
+input[type="search"], input[type="text"], textarea {
+  width: 100%;
+  font: inherit;
+  font-size: 16px; /* O-F7: >=16px input → no iOS zoom-on-focus */
+  color: var(--text-hi);
+  background: var(--surface-2);
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-sm);
+  padding: var(--s3) var(--s4);
+}
+input:focus, textarea:focus, button:focus-visible {
+  outline: none;
+  /* O-F7: box-shadow focus ring, NOT raw outline (respects border radius) */
+  box-shadow: 0 0 0 2px var(--accent-ring);
+}
+button.go {
+  font: inherit; font-weight: 600;
+  white-space: nowrap;
+  color: var(--bg);
+  background: var(--accent);
+  border: none;
+  border-radius: var(--r-sm);
+  padding: var(--s3) var(--s5);
+  cursor: pointer;
+  transition: transform var(--t-fast) var(--ease), filter var(--t-fast) var(--ease);
+}
+@media (hover: hover) { button.go:hover { transform: translateY(-1px); filter: brightness(1.06); } }
+
+.hit { padding: var(--s4) 0; border-bottom: 1px solid var(--hairline-2); }
+.hit-head { display: flex; align-items: baseline; gap: var(--s3); margin-bottom: var(--s2); }
+.hit-file { font-family: var(--font-mono); font-size: 0.82rem; color: var(--accent-2); }
+.hit-score { font-size: 0.72rem; color: var(--text-lo); }
+.hit-snip { font-size: 0.84rem; color: var(--text-mid); white-space: pre-wrap; line-height: 1.55; }
+
+/* markdown render region (brain file viewer) */
+.md { font-size: 0.92rem; color: var(--text-mid); line-height: 1.7; }
+.md h1, .md h2, .md h3 { font-family: var(--font-display); font-weight: 500; color: var(--text-hi); margin: var(--s5) 0 var(--s2); }
+.md h1 { font-size: 1.6rem; } .md h2 { font-size: 1.3rem; } .md h3 { font-size: 1.1rem; }
+.md pre { background: var(--surface-3); border: 1px solid var(--hairline); border-radius: var(--r-sm); padding: var(--s4); overflow-x: auto; font-family: var(--font-mono); font-size: 0.82rem; }
+.md code { background: var(--surface-3); padding: 0 4px; border-radius: 4px; font-size: 0.85em; }
+.md pre code { background: none; padding: 0; }
+.md a { color: var(--accent-2); text-decoration: underline; text-underline-offset: 2px; }
+.md ul, .md ol { padding-left: var(--s5); }
+
+/* ---------------------------------------------------------------- gallery ---- */
+/* the flagship view: every `pixel mock` as a card. ONE surface per card (no inner cards). */
+.gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); gap: var(--s5); }
+.mock-card { background: var(--surface-1); border: 1px solid var(--hairline); border-radius: var(--r-lg); overflow: hidden; display: flex; flex-direction: column; }
+.mock-frame { width: 100%; height: 280px; border: none; background: var(--bg); border-bottom: 1px solid var(--hairline); }
+.mock-body { padding: var(--s5); display: flex; flex-direction: column; gap: var(--s3); }
+.mock-icp { font-family: var(--font-display); font-weight: 500; font-size: 1.2rem; }
+.mock-icp em { color: var(--accent); font-style: italic; }
+.mock-brief { color: var(--text-mid); font-size: 0.86rem; }
+.mock-gates { display: flex; flex-wrap: wrap; gap: var(--s2); }
+.mock-links { display: flex; gap: var(--s4); margin-top: var(--s1); font-size: 0.82rem; }
+.mock-links a { color: var(--accent-2); text-decoration: underline; text-underline-offset: 2px; }
+
+/* a non-gray empty state (O-HS5: never a gray placeholder box) — a serif line on the warm base */
+.empty {
+  padding: var(--s8) var(--s5);
+  text-align: center;
+  border: 1px dashed var(--hairline);
+  border-radius: var(--r-md);
+  color: var(--text-lo);
+}
+.empty .big { font-family: var(--font-display); font-style: italic; font-size: 1.4rem; color: var(--text-mid); display: block; margin-bottom: var(--s2); }
+
+/* the wikilink graph (brain browser) — an SVG force-ish layout drawn by app.js */
+.graph-wrap { background: var(--surface-1); border: 1px solid var(--hairline); border-radius: var(--r-md); padding: var(--s4); margin-bottom: var(--s5); }
+.graph-wrap svg { width: 100%; height: 260px; display: block; }
+.graph-node { cursor: pointer; }
+.graph-node text { font-size: 11px; fill: var(--text-mid); font-family: var(--font-body); }
+.graph-edge { stroke: var(--hairline); stroke-width: 1; }
+
+.spinner { color: var(--text-lo); font-style: italic; font-family: var(--font-display); padding: var(--s5) 0; }
+
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; }
+}
+
+@media (max-width: 880px) {
+  .masthead { grid-template-columns: 1fr; }
+  .stat-strip { justify-content: flex-start; }
+  .shell { grid-template-columns: 1fr; }
+  .rail { flex-direction: row; flex-wrap: wrap; border-right: none; border-bottom: 1px solid var(--hairline); }
+  .rail button { width: auto; }
+  .rail-foot { display: none; }
+  .bento { grid-template-columns: 1fr; }
+  .panel.wide, .panel.narrow, .panel.full { grid-column: span 1; }
+  .stage { padding: var(--s5) var(--s4); }
+}

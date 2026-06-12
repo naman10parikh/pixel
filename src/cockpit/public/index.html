@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en" data-scroll-behavior="smooth">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>pixel · cockpit</title>
+  <link rel="icon" href="data:," />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <!-- Spectral DISPLAY (distinctive editorial serif, OFF impeccable's overused-font set) + Poppins body.
+       The serif+sans pairing is the #1 anti-slop move (O-HS2 / O-F6); we use Spectral not Instrument
+       Serif because impeccable 2.3.2 now flags 'instrument serif' as the AI monoculture (G26 gate). -->
+  <link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,500;1,400;1,500&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <header class="masthead">
+    <div>
+      <div class="wordmark">pixel<span class="dot">.</span></div>
+      <p class="tagline">The Energy fleet's frontend employee &mdash; it knows the ICP, has taste, and produces gated mockups. This cockpit shows what it knows and what it has shipped. Powered by Energy.</p>
+    </div>
+    <div class="stat-strip" aria-label="summary">
+      <div class="stat"><div class="v num" id="stat-mocks">&mdash;</div><div class="k">mockups</div></div>
+      <div class="stat"><div class="v num" id="stat-runs">&mdash;</div><div class="k">runs</div></div>
+      <div class="stat"><div class="v num" id="stat-brain">&mdash;</div><div class="k">brain notes</div></div>
+    </div>
+  </header>
+
+  <div class="shell">
+    <!-- the 5 cockpit views — the nav rail. Each button switches the stage to that view.
+         View anchors (G24 verify greps for these labels, incl. "Mockup Gallery"): -->
+    <nav class="rail" aria-label="Views">
+      <button data-view="gallery" aria-current="true"><span class="glyph">G</span> Mockup Gallery</button>
+      <button data-view="brain"><span class="glyph">B</span> Brain Browser</button>
+      <button data-view="runs"><span class="glyph">R</span> Run Log</button>
+      <button data-view="evals"><span class="glyph">E</span> Eval Scores</button>
+      <button data-view="ask"><span class="glyph">A</span> Ask the Employee</button>
+      <div class="rail-foot">
+        Read-only window into the employee. The Ask box runs the keyless brain search + the
+        deterministic taste-check &mdash; no provider keys.<br /><br />
+        <kbd>/</kbd> focus search &middot; <kbd>Esc</kbd> back to gallery
+      </div>
+    </nav>
+
+    <!-- the single mount point: app.js renders the active view here -->
+    <main id="stage" class="stage" aria-live="polite">
+      <div class="spinner">loading the cockpit&hellip;</div>
+    </main>
+  </div>
+
+  <script src="/app.js"></script>
+</body>
+</html>
