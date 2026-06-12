@@ -1,0 +1,67 @@
+# pixel
+
+> The Energy fleet's frontend web designer-engineer. A highly opinionated harness that scaffolds,
+> designs-to-taste, generates-then-gates, and verifies Next.js 16 / Tailwind v4 / shadcn UI. It treats
+> every generated UI as an untrusted draft and ships only what survives the taste gates. The moat is the
+> audit/taste gate (`impeccable detect` + design-systems DFS), not the generator.
+> Tool-employee: surfaces are the CLI, the `pixel-mcp` MCP server, and the local cockpit. Read `brain/` first.
+
+## Agent docs
+
+- [AGENTS.md](AGENTS.md): what pixel does, the full `pixel <cmd>` tool list, the MCP tools, the REFUSES boundary, "read brain/ first".
+- [CLAUDE.md](CLAUDE.md): pixel's operating doc — stack pins, the 8-job loop, the §0 grep-set discipline, the untrusted-draft rule, commit convention.
+- [brain/MOC - pixel.md](brain/MOC%20-%20pixel.md): the brain hub — wikilinks to every expertise note.
+
+## CLI (the hands — `pixel <cmd>`)
+
+- `pixel mock "<brief>" [--out DIR] [--no-sandbox] [--json]`: THE FLAGSHIP — discovery brief → first-pass draft → 7-step gate → ICP-aware mockup + scaffolded Next app. Exit non-0 if the gate fails.
+- `pixel scaffold [DIR] [--base radix]`: clean Next 16 app via `shadcn init -t next --base radix`; wires Tailwind v4 @theme + house tokens.
+- `pixel design "<brief>" [--vertical …]`: discovery brief + FIRST/SECOND/THIRD hierarchy map. NO BRIEF = NO DESIGN.
+- `pixel generate "<prompt>" [--model …] [--out DIR]`: v0 Platform API draft (untrusted — must pass `pixel audit`).
+- `pixel audit [DIR] [--sandbox] [--fix]`: the 7-step ship gate — impeccable → axe → lhci → 12-dim → manual-a11y → security → visual. Exit-code gate.
+- `pixel verify [DIR]`: the silent-failure assertion set — §0 grep-set + build + screenshot + console=0-hydration.
+- `pixel migrate [DIR] [--from 15]`: codemod-then-grep upgrade, then `pixel verify` for the gap.
+- `pixel cockpit [--port 7780]`: serve the localhost cockpit (brain browser · run log · eval scores · ask-the-employee · mockup gallery).
+- `pixel logs [--last N]`: aggregate `logs/runs.jsonl` (cost/latency/gate-results per run).
+
+## MCP server (`pixel-mcp` — JSON-RPC over stdio; `node dist/mcp-server.js`; wired in `.mcp.json`)
+
+- `pixel_mock(brief, out?)`: the flagship over MCP → `{mockup_path, app_path, gate_report}`.
+- `pixel_scaffold(dir, base?)`: clean Next 16 app.
+- `pixel_design(brief, vertical?)`: discovery brief + hierarchy map.
+- `pixel_generate(prompt, model?)`: v0 draft (untrusted).
+- `pixel_audit(dir, sandbox?)`: the 7-step gate.
+- `pixel_verify(dir)`: silent-failure check.
+- `pixel_taste_check(code)`: impeccable + opinions over a snippet (the cheapest call).
+- `pixel_brain_search(query)`: BM25 over `brain/` (the Memory layer over MCP).
+
+## Skills (repo-authored — each encodes a named OPINIONS/PITFALLS stance)
+
+- [skills/pixel-anti-slop/SKILL.md](skills/pixel-anti-slop/SKILL.md): the deterministic "does my own output look AI-made" check — O-HS1..7 + O-F1 (indigo override) + the impeccable 41-rule gate.
+- [skills/pixel-rsc-boundary/SKILL.md](skills/pixel-rsc-boundary/SKILL.md): the RSC serialization boundary — PITFALLS §5 + the 5 boundary mistakes + S8/S20.
+- [skills/pixel-animate/SKILL.md](skills/pixel-animate/SKILL.md): the lowest-layer animation ladder + the Lenis+GSAP one-rAF recipe (`autoRaf:false`, S5) + `LazyMotion`+`m` (O5).
+- [skills/pixel-migrate-next16/SKILL.md](skills/pixel-migrate-next16/SKILL.md): the §0 grep-set + S1 (`middleware.ts`→`proxy.ts`) + S17 + S18 + codemod-then-grep (O13).
+- [skills/pixel-ship-gate/SKILL.md](skills/pixel-ship-gate/SKILL.md): the 7-step ship gate + WCAG 2.2 AA + CWV 2026 (LCP 2.0s/INP 200ms/CLS 0.1) + S15/S16.
+
+## Sub-agents (fresh-context personas — `.claude/agents/`)
+
+- [.claude/agents/pixel-taste-critic.md](.claude/agents/pixel-taste-critic.md): fresh-context design review — the anti-slop + 12-dim binary audit; "is this slop?" verdict. The headline packaged persona.
+- [.claude/agents/pixel-migration-pilot.md](.claude/agents/pixel-migration-pilot.md): codemod-then-grep Next/Tailwind upgrade pilot — owns the migration silent-failure class.
+
+## The brain (the employee's competence)
+
+- [brain/EXPERTISE-MAP.md](brain/EXPERTISE-MAP.md): the 8-job pixel loop + mastery checklist.
+- [brain/BATTLE-TESTED-SCENARIOS.md](brain/BATTLE-TESTED-SCENARIOS.md): S1–S20, each with a `VERIFY` line (the eval L1 set).
+- [brain/KNOWN-PITFALLS.md](brain/KNOWN-PITFALLS.md): the silent-failure class (§0–§12).
+- [brain/OPINIONS.md](brain/OPINIONS.md): the ALWAYS-X/NEVER-Y taste stances with the *because*.
+- [brain/GAPS-AND-DISPUTES.md](brain/GAPS-AND-DISPUTES.md): where the field disagrees + where the brain is thin.
+- [brain/TOOL-MATRIX.md](brain/TOOL-MATRIX.md): default-vs-alt per concern + the ecosystem watch.
+
+## Acceptance test (the bar)
+
+`pixel mock "<brief>"` → ICP-aware mockup + scaffolded Next 16 app, then `npx impeccable detect --json <out>/app/src` exits 0 (keyless) AND a Playwright smoke passes. Run by the red-blocking `acceptance` job in [.github/workflows/ci.yml](.github/workflows/ci.yml); it is GT1 in `eval/eval.mjs`.
+
+## Optional
+
+- [.claude-plugin/manifest.json](.claude-plugin/manifest.json): the Claude Code plugin bundle (skills + MCP + CLI + hooks + the 2 personas). `claude plugin install pixel`.
+- [.well-known/agent.json](.well-known/agent.json): the A2A agent card (capabilities incl. `mock`/`audit`).

@@ -1,0 +1,61 @@
+{
+  "schema_version": "1.0",
+  "name": "pixel",
+  "display_name": "pixel — Frontend Web Designer-Engineer",
+  "description": "The Energy fleet's frontend employee. Scaffolds, designs-to-taste, generates-then-gates, and verifies Next.js 16 / Tailwind v4 / shadcn UI. Treats every generated UI as an untrusted draft and ships only what passes the anti-slop taste gate (impeccable + design-systems DFS).",
+  "version": "0.1.0",
+  "author": "Energy Platform",
+  "license": "MIT",
+  "repository": "https://github.com/naman10parikh/pixel",
+  "keywords": ["claude-code", "frontend", "nextjs", "tailwind", "shadcn", "anti-slop", "design", "harness"],
+  "mcp_servers": [
+    {
+      "name": "pixel-mcp",
+      "description": "pixel's own frontend tools over JSON-RPC — pixel_mock/scaffold/design/generate/audit/verify/taste_check/brain_search.",
+      "transport": "stdio",
+      "command": "node",
+      "args": ["dist/mcp-server.js"],
+      "env": {}
+    }
+  ],
+  "cli": {
+    "binary": "pixel",
+    "entrypoint": "./dist/cli.js",
+    "commands": [
+      { "name": "mock", "description": "flagship: discovery brief -> first-pass draft -> 7-step gate -> ICP-aware mockup + scaffolded Next app", "usage": "pixel mock \"<brief>\" [--out DIR] [--no-sandbox] [--json]" },
+      { "name": "scaffold", "description": "clean Next 16 app via shadcn init -t next --base radix; wires Tailwind v4 @theme + house tokens", "usage": "pixel scaffold [DIR] [--base radix]" },
+      { "name": "design", "description": "discovery: 6-section brief + FIRST/SECOND/THIRD hierarchy map; refuses an empty brief (NO BRIEF = NO DESIGN)", "usage": "pixel design \"<brief>\" [--vertical …]" },
+      { "name": "generate", "description": "v0 Platform API first-pass draft (untrusted — must pass pixel audit)", "usage": "pixel generate \"<prompt>\" [--model …] [--out DIR]" },
+      { "name": "audit", "description": "the 7-step ship gate: impeccable -> axe -> lhci -> 12-dim -> manual-a11y -> security -> visual", "usage": "pixel audit [DIR] [--sandbox] [--fix]" },
+      { "name": "verify", "description": "the silent-failure assertion set: §0 grep-set + build + screenshot + console=0-hydration", "usage": "pixel verify [DIR]" },
+      { "name": "migrate", "description": "codemod-then-grep upgrade (@next/codemod + @tailwindcss/upgrade), then pixel verify for the gap", "usage": "pixel migrate [DIR] [--from 15]" },
+      { "name": "cockpit", "description": "serve the localhost cockpit (brain browser · run log · eval scores · ask-the-employee · mockup gallery)", "usage": "pixel cockpit [--port 7780]" },
+      { "name": "logs", "description": "aggregate logs/runs.jsonl — cost/latency/gate-results per run", "usage": "pixel logs [--last N]" }
+    ]
+  },
+  "capabilities": {
+    "tools": [
+      { "name": "pixel_mock", "description": "Flagship over MCP: brief -> mockup + scaffolded Next app, gated.", "when_to_use": "When you have a product brief and want an ICP-aware mockup + a clean Next 16 app that passes the anti-slop gate." },
+      { "name": "pixel_taste_check", "description": "impeccable + opinions over a code snippet — the cheapest 'is this slop?' call.", "when_to_use": "When you want a fast verdict on whether a UI snippet looks AI-generated, without booting an app." },
+      { "name": "pixel_brain_search", "description": "BM25 over brain/ — the Memory layer over MCP.", "when_to_use": "When you need pixel's stance on a frontend question (e.g. cacheComponents + Clerk, Lenis+GSAP jitter)." }
+    ]
+  },
+  "skills": [
+    "skills/pixel-anti-slop/SKILL.md",
+    "skills/pixel-rsc-boundary/SKILL.md",
+    "skills/pixel-animate/SKILL.md",
+    "skills/pixel-migrate-next16/SKILL.md",
+    "skills/pixel-ship-gate/SKILL.md"
+  ],
+  "subAgents": [
+    ".claude/agents/pixel-taste-critic.md",
+    ".claude/agents/pixel-migration-pilot.md"
+  ],
+  "hooks": [
+    ".claude/hooks/pixel-grep-set.cjs",
+    ".claude/hooks/pixel-session-start.sh"
+  ],
+  "settings": ".claude/settings.json",
+  "brain": "brain/MOC - pixel.md",
+  "install_instructions": "1. Build the package: pnpm install && pnpm build\n2. Add this plugin to Claude Code: Settings -> Plugins -> Add local plugin -> select this directory (or `claude plugin install pixel`).\n3. The pixel CLI, the pixel-mcp tools, the 5 skills, the §0 grep-set hooks, and the 2 sub-agent personas are now available."
+}
