@@ -1,0 +1,18 @@
+{
+  "name": "pixel-good-fixture",
+  "private": true,
+  "comment": "GT8 (S14): the single unified radix-ui dep, no per-package react primitives. GT10 (S16): zero a11y-overlay vendor deps. GT12 (S18): the v4 PostCSS plugin. This fixture is the CORRECT-pattern golden example the L1 greps assert against; the comment avoids the literal grepped tokens so the negative controls stay real.",
+  "dependencies": {
+    "next": "16.2.9",
+    "react": "19.2.7",
+    "react-dom": "19.2.7",
+    "radix-ui": "latest",
+    "lenis": "1.3.23",
+    "gsap": "3.15.0",
+    "lucide-react": "latest"
+  },
+  "devDependencies": {
+    "tailwindcss": "4.3.0",
+    "@tailwindcss/postcss": "4.3.0"
+  }
+}

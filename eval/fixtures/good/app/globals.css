@@ -1,0 +1,20 @@
+/* GT12 fixture (S18) — Tailwind v4 CSS-first done right. The single `@import "tailwindcss"`
+   sits in this same file, so any `@apply` here has theme context (it does NOT silently no-op).
+   There is NO orphan `@apply` in a file lacking the import/@reference. GT12 (L1) asserts: no CSS
+   file uses `@apply` without a sibling `@import "tailwindcss"`/`@reference`. The stale
+   `@tailwind base/components/utilities` directives are absent (the §0 grep-set). */
+@import "tailwindcss";
+
+@theme {
+  /* warm-black house baseline + ONE non-purple accent (amber) — O-HS1 / O-F1.
+     STRICT prefixes (--color-/--font-) or the utility silently won't generate (§2.1). */
+  --color-bg: oklch(0.16 0.006 60);
+  --color-accent: oklch(0.78 0.15 70);
+  --font-display: "Spectral", serif;
+  --font-body: "Poppins", sans-serif;
+}
+
+/* this @apply is safe — it is in the SAME file that does @import "tailwindcss". */
+.surface {
+  @apply rounded-lg;
+}
