@@ -12,12 +12,34 @@
 // (the app is still buildable from create-next-app alone, which is what the verify line asserts).
 
 import chalk from "chalk";
-import { existsSync, mkdirSync, writeFileSync, readdirSync } from "node:fs";
+import { existsSync, mkdirSync, writeFileSync, readFileSync, readdirSync } from "node:fs";
 import { join, resolve, basename } from "node:path";
 import { run } from "../lib/exec.js";
 import { logRun, startTimer } from "../lib/logger.js";
 import { HOUSE_THEME_CSS } from "../lib/tokens.js";
 import type { GateResult } from "../lib/logger.js";
+
+/**
+ * After `shadcn init`, the scaffolder rewrites globals.css with its OWN `:root`/`.dark`
+ * `--background`/`--foreground` defaults (`oklch(1 0 0)` white / `oklch(0.145 0 0)` near-black).
+ * The `body` uses `bg-background`, so those WIN — the house warm-black @theme tokens become dead.
+ * `oklch(0.145 0 0)` is exactly the near-black O-HS1 BANS. This patch points `--background`/
+ * `--foreground` at the house warm-black palette so the emitted app's body is genuinely warm-black,
+ * not shadcn's near-black default. Surgical: it touches only the four shadcn default value lines.
+ */
+function patchHouseBackground(cssPath: string): boolean {
+  if (!existsSync(cssPath)) return false;
+  const before = readFileSync(cssPath, "utf8");
+  // House warm-black (O-HS1, never #000/oklch(0.145)) + warm off-white text — mirrors tokens.ts.
+  const after = before
+    .replace(/(:root\s*\{[^}]*?--background:\s*)oklch\(1 0 0\)/, "$1#141312")
+    .replace(/(:root\s*\{[^}]*?--foreground:\s*)oklch\(0\.145 0 0\)/, "$1#f2efe9")
+    .replace(/(\.dark\s*\{[^}]*?--background:\s*)oklch\(0\.145 0 0\)/, "$1#141312")
+    .replace(/(\.dark\s*\{[^}]*?--foreground:\s*)oklch\(0\.985 0 0\)/, "$1#f2efe9");
+  if (after === before) return false;
+  writeFileSync(cssPath, after, "utf8");
+  return true;
+}
 
 /** Find the app's global stylesheet to append the @theme into. */
 function findGlobalCss(appDir: string): string {
@@ -106,6 +128,15 @@ export async function runScaffold(dir: string, opts: { base: string }): Promise<
     pass: shadcn.found ? shadcn.ok : null,
     detail: shadcn.found ? (shadcn.ok ? `base ${opts.base}` : `exit ${shadcn.code} (app still buildable)`) : "shadcn unavailable — app still buildable from create-next-app",
   });
+
+  // ── 4 · re-assert the house warm-black over shadcn's white/near-black default (O-HS1). ────────
+  // shadcn init clobbers `--background`/`--foreground`; without this the body ships near-black
+  // oklch(0.145) — the exact value O-HS1 bans — so the flagship's OWN scaffold would fail its taste.
+  if (shadcn.found && shadcn.ok) {
+    const patched = patchHouseBackground(cssPath);
+    gates.push({ gate: "house-background", pass: patched ? true : null, detail: patched ? "body → warm-black #141312 (O-HS1)" : "shadcn defaults not found to patch" });
+    if (patched) console.log(chalk.green("✓ re-asserted house warm-black on the body"), chalk.dim("(O-HS1)"));
+  }
 
   console.log(chalk.bold(`\npixel scaffold done → ${target}`));
   console.log(chalk.dim(`  next: cd ${name} && pnpm install && pnpm build  (then \`pixel verify ${name}\`)`));

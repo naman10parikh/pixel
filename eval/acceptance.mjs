@@ -23,7 +23,7 @@
 // Exit 0 iff every HARD step passed (a best-effort SKIP never reds the run). Flags: --json,
 // --out <dir> (default a fresh tmp dir), --keep (don't clean --out), --no-smoke (skip step 4).
 
-import { existsSync, mkdtempSync, readFileSync, rmSync } from "node:fs";
+import { existsSync, mkdtempSync, readFileSync, readdirSync, rmSync } from "node:fs";
 import { join } from "node:path";
 import { tmpdir } from "node:os";
 import { spawnSync } from "node:child_process";
@@ -56,12 +56,32 @@ function run(cmd, cmdArgs, opts = {}) {
   return { code: r.status ?? (found ? 1 : 127), stdout: r.stdout ?? "", stderr: r.stderr ?? "", found };
 }
 
-/** Resolve the real Next source dir to gate (the scaffolder uses --no-src-dir → app/app). */
+/** Does `dir` contain at least one .tsx/.ts source file (recursively, shallow)? A dir that
+ *  exists but holds no source would make impeccable a VACUOUS green (it scans nothing → []
+ *  → exit 0). The gate must have teeth, so we only treat a dir as the source if it has source. */
+function hasSource(dir) {
+  let entries;
+  try {
+    entries = readdirSync(dir, { withFileTypes: true });
+  } catch {
+    return false;
+  }
+  for (const e of entries) {
+    if (e.isFile() && /\.(tsx?|jsx?)$/.test(e.name)) return true;
+    if (e.isDirectory() && e.name !== "node_modules" && e.name !== ".next" && hasSource(join(dir, e.name))) return true;
+  }
+  return false;
+}
+
+/** Resolve the real Next source dir to gate (the scaffolder uses --no-src-dir → app/app).
+ *  Pick the FIRST candidate that exists AND actually holds source — never a vacuous empty dir
+ *  (the PLAN §5 literal `<out>/app/src` does not exist under --no-src-dir, so scanning it would
+ *  be a false green). Returns null if no candidate has source, so step 3 fails honestly. */
 function appSourceDir(out) {
   for (const c of [join(out, "app", "src"), join(out, "app", "app"), join(out, "app")]) {
-    if (existsSync(c)) return c;
+    if (existsSync(c) && hasSource(c)) return c;
   }
-  return join(out, "app");
+  return null;
 }
 
 const steps = [];
@@ -99,12 +119,17 @@ function main() {
   // Point at the actual source dir (app/app under --no-src-dir) so the gate has TEETH — not the
   // vacuous missing-dir pass. impeccable is the anti-slop hard gate (41 rules, no API key).
   const src = appSourceDir(OUT);
-  const imp = run("npx", ["--yes", "impeccable", "detect", "--json", src], { timeoutMs: 120_000 });
-  if (!imp.found) {
-    record("3.impeccable-clean", true, false, "impeccable not installed (offline npx fetch?) — the keyless gate could not run");
+  if (!src) {
+    // No source dir with .tsx/.ts found — impeccable would scan nothing and FALSELY pass. Fail hard.
+    record("3.impeccable-clean", true, false, "no .tsx/.ts source found under <out>/app — refusing a vacuous impeccable pass (the gate must have teeth)");
   } else {
-    const clean = imp.code === 0;
-    record("3.impeccable-clean", true, clean, clean ? `0 slop violations @ ${src}` : `slop @ ${src}: ${(imp.stdout || imp.stderr).split("\n").slice(-2).join(" ").slice(0, 160)}`);
+    const imp = run("npx", ["--yes", "impeccable", "detect", "--json", src], { timeoutMs: 120_000 });
+    if (!imp.found) {
+      record("3.impeccable-clean", true, false, "impeccable not installed (offline npx fetch?) — the keyless gate could not run");
+    } else {
+      const clean = imp.code === 0;
+      record("3.impeccable-clean", true, clean, clean ? `0 slop violations @ ${src}` : `slop @ ${src}: ${(imp.stdout || imp.stderr).split("\n").slice(-2).join(" ").slice(0, 160)}`);
+    }
   }
 
   // ── STEP 4 · Playwright smoke — best-effort (needs a built app + a Playwright browser). ────────
