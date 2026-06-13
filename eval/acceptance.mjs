@@ -95,9 +95,17 @@ function main() {
   const hasMockup = existsSync(join(OUT, "mockup", "index.html"));
   const hasApp = existsSync(join(OUT, "app"));
   const brief = existsSync(join(OUT, "brief.md")) ? readFileSync(join(OUT, "brief.md"), "utf8") : "";
-  const namedIcp = /marcus/i.test(brief) && brief.length > 80; // the ICP is a specific named person
+  // TEETH (T-council fix): assert the ICP is extracted INTO section-1's BODY, not just echoed in
+  // the `> Source brief:` quote at the top. Slice §1 (between the `## 1.` heading and `## 2.`) and
+  // require the named person there AND no residual `_____` on the FIRST ICP bullet — so a blank
+  // brief (the prior defect) hard-fails the way the brain says it should ("a blank = a failed gate").
+  const sec1 = (brief.match(/^##\s*1\.[\s\S]*?(?=^##\s*2\.)/m) ?? [""])[0];
+  const icpBullet = (sec1.match(/\*\*ICP[^\n]*\*\*\s*\n\s*-\s*([^\n]+)/) ?? [, ""])[1] ?? "";
+  const namedInBody = /marcus/i.test(sec1); // the named person is IN the filled section, not the echo
+  const icpFilled = icpBullet.trim().length > 0 && !/^_+$/.test(icpBullet.trim()); // first ICP bullet is real
+  const namedIcp = namedInBody && icpFilled && brief.length > 80;
   const step1 = mock.code === 0 && hasMockup && hasApp && namedIcp;
-  record("1.mock→mockup+app+namedICP", true, step1, `exit=${mock.code} mockup=${hasMockup} app=${hasApp} brief-names-ICP=${namedIcp}`);
+  record("1.mock→mockup+app+namedICP", true, step1, `exit=${mock.code} mockup=${hasMockup} app=${hasApp} ICP-in-§1-body=${namedInBody} §1-ICP-filled=${icpFilled}`);
 
   // ── STEP 2 · install + build the emitted app — best-effort (needs npm egress). ────────────────
   const appDir = join(OUT, "app");

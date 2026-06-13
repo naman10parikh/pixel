@@ -62,10 +62,16 @@ export function goldenTasks() {
         const hasMockup = existsSync(join(ctx.mock, "mockup", "index.html"));
         const hasApp = existsSync(join(ctx.mock, "app"));
         const brief = read(ctx.mock, "brief.md");
-        const namedIcp = /(?:ICP|persona|for)\s*[:—-]?\s*\w/i.test(brief) && brief.length > 80;
+        // TEETH (T-council fix): assert §1's ICP BODY is FILLED — not the template heading nor the
+        // echoed source-brief quote. Slice §1 and require its first ICP bullet to be non-blank
+        // (no residual `_____`), so the prior blank-brief defect hard-fails GT1 (a CI-block task).
+        const sec1 = (brief.match(/^##\s*1\.[\s\S]*?(?=^##\s*2\.)/m) ?? [""])[0];
+        const icpBullet = (sec1.match(/\*\*ICP[^\n]*\*\*\s*\n\s*-\s*([^\n]+)/) ?? [, ""])[1] ?? "";
+        const icpFilled = icpBullet.trim().length > 0 && !/^_+$/.test(icpBullet.trim());
+        const namedIcp = icpFilled && brief.length > 80;
         return {
           pass: hasMockup && hasApp && namedIcp,
-          detail: `mockup=${hasMockup} app=${hasApp} brief-names-ICP=${namedIcp}`,
+          detail: `mockup=${hasMockup} app=${hasApp} §1-ICP-filled=${icpFilled}`,
         };
       },
     },

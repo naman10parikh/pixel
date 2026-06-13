@@ -30,6 +30,61 @@ export function extractIcpName(brief: string): string {
   return cap ? cap[1] : "the user";
 }
 
+/** The ICP facts pulled deterministically from a one-line brief, for the discovery brief's
+ *  section-1 ICP line (J1) — the SAME extraction `pixel mock` already runs for the mockup, so the
+ *  headline deliverable's brief carries the named person instead of a blank `_____`. The brain
+ *  forces a SPECIFIC named person (O11); briefs read "a <artifact> for <Name>, a <role> who lives
+ *  in <tool>". We parse name + role + tool + the implied product type; fields we cannot extract
+ *  stay null (the brief renders those as an honest fill-prompt — a blank means discovery isn't
+ *  done, never a fabricated guess). `dfsHero` maps the role/product to the DFS Hero by ICP type
+ *  (the brief's own §3 heuristic: enterprise→logo bar · dev→code/terminal · …). */
+export interface IcpFacts {
+  readonly name: string; // never empty (falls back to "the user")
+  readonly role: string | null; // e.g. "hedge-fund PM"
+  readonly tool: string | null; // e.g. "Bloomberg Terminal"
+  readonly product: string | null; // e.g. "portfolio dashboard"
+  readonly dfsHero: string; // the FIRST/Hero component for this ICP type
+}
+
+export function extractIcpFacts(brief: string): IcpFacts {
+  const b = brief.trim();
+  const name = extractIcpName(b);
+  // "..., a <role> who/that lives in/works in ..." → the role phrase after the name.
+  const roleMatch = /\bfor\s+(?:Dr\.?\s+)?[A-Z][a-z]+\s*,\s*an?\s+([^,.]+?)\s+(?:who|that|which)\b/i.exec(b)
+    ?? /,\s*an?\s+([^,.]+?)\s+(?:who|that|which)\b/i.exec(b);
+  const role = roleMatch ? roleMatch[1].trim() : null;
+  // "... lives in / works in / spends all day in <Tool>" → the named tool.
+  const toolMatch = /\b(?:lives?|works?|spends?(?:\s+all\s+day)?)\s+in\s+([^,.]+)/i.exec(b);
+  const tool = toolMatch ? toolMatch[1].trim() : null;
+  // "a/an <product type> for ..." → the artifact being designed (leading noun phrase).
+  const productMatch = /^\s*(?:a|an|the)\s+([^,.]+?)\s+for\b/i.exec(b);
+  const product = productMatch ? productMatch[1].trim() : null;
+
+  // DFS Hero by ICP type — the brief's §3 mapping, keyed off role/product keywords. Order matters:
+  // STRONG, vertical-specific signals (job titles + named tools) are checked before generic words
+  // that collide across verticals ("dashboard"/"portfolio"/"terminal"). E.g. a hedge-fund PM in
+  // "Bloomberg Terminal" is finance, not dev (the dev branch deliberately omits the ambiguous bare
+  // "terminal"); a *code review* dashboard is dev; a *design* portfolio is creative.
+  // Patterns use a LEADING word boundary only (no trailing \b) so prefixes match their inflections
+  // (design→designer, invest→investor, equit→equity, trad→trader, illustrat→illustrator) — a
+  // trailing \b would defeat that (design\b fails on "designer"). The leading \b blocks mid-word
+  // false positives (e.g. "api" inside "rapid").
+  const hay = `${role ?? ""} ${product ?? ""} ${b}`.toLowerCase();
+  let dfsHero = "headline + primary CTA (consumer default)";
+  if (/\b(pm|trad|hedge|fund|financ|invest|bloomberg|analyst|kpi|equit|broker|ledger)/.test(hay))
+    dfsHero = "metrics / data table (investor·finance ICP)"; // strong finance signals (titles/tools)
+  else if (/\b(dev|engineer|api|code|cli|sdk|repo|commit|deploy)/.test(hay))
+    dfsHero = "code / terminal block (developer ICP)"; // dev — NOT bare "terminal" (Bloomberg collision)
+  else if (/\b(enterprise|b2b|admin|ops|saas|procure|complian|vendor)/.test(hay))
+    dfsHero = "logo bar / trust row (enterprise ICP)";
+  else if (/\b(design|artist|creator|showcase|gallery|brand|illustrat|photograph)/.test(hay))
+    dfsHero = "showcase / gallery (creative ICP)";
+  else if (/\b(portfolio|dashboard|metric|report)/.test(hay))
+    dfsHero = "metrics / data table (investor·finance ICP)"; // weak fallback: a generic data UI
+
+  return { name, role, tool, product, dfsHero };
+}
+
 /** A short, safe HTML-escaped echo of the brief for the mockup's context line. */
 function esc(s: string): string {
   return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");

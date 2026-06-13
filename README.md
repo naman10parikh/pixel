@@ -17,6 +17,12 @@ node dist/cli.js --version
 node dist/cli.js mock "a portfolio dashboard for Marcus, a hedge-fund PM who lives in Bloomberg Terminal" --out /tmp/pixel-demo
 ```
 
+To use the `pixel` binary directly (every command below is also reachable as `pixel <cmd>`):
+
+```bash
+pnpm link --global   # then: pixel --version  ·  pixel mock "<brief>" --out /tmp/pixel-demo
+```
+
 ## The surfaces
 
 - **CLI** (`pixel <cmd>`): `mock` · `scaffold` · `design` · `generate` · `audit` · `verify` · `migrate` ·

@@ -90,7 +90,7 @@ program
 // pixel audit [DIR] — the 7-step ship gate (exit-code gate).
 program
   .command("audit")
-  .description("the 7-step ship gate in order: impeccable → axe → lhci → 12-dim → manual-a11y → security → visual")
+  .description("the 7-step ship gate in order: impeccable (keyless CLI gate) → axe · lhci · 12-dim · manual-a11y · security · visual (run in the live smoke / energy skill — shown as SKIP here, never a fake pass, O14)")
   .argument("[dir]", "directory to audit", ".")
   .option("--sandbox", "run the build + gate inside an E2B sandbox (E17)")
   .option("--fix", "apply auto-fixes where a gate supports it")
