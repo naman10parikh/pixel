@@ -45,13 +45,11 @@ jobs:
         with:
           node-version: 22
           cache: pnpm
-      - name: Install a Playwright browser (so the §9 COMPONENT layer RUNS, not skips)
-        if: steps.rt.outputs.armed == 'true'
-        run: npx --yes playwright install --with-deps chromium
       - name: Install + build + test (red-blocking once code exists)
         if: steps.rt.outputs.armed == 'true'
         run: |
           pnpm install --frozen-lockfile || pnpm install
+          pnpm exec playwright install --with-deps chromium  # repo's pinned playwright → matching browser build (npx fetches latest → revision mismatch)
           pnpm build
           pnpm test
       - name: Skeleton phase
@@ -80,7 +78,7 @@ jobs:
           pnpm install --frozen-lockfile || pnpm install
           pnpm build
       - name: Install a Playwright browser (for the smoke half)
-        run: npx --yes playwright install --with-deps chromium
+        run: pnpm exec playwright install --with-deps chromium  # repo-pinned playwright (npx-latest downloads a non-matching browser revision → smoke silently SKIPs)
       - name: Acceptance test — pixel mock → impeccable-clean + Playwright smoke (KEYLESS, red-blocking)
         env:
           # Intentionally NO V0_API_KEY → forces the keyless scaffold fallback (R2) the bar must prove.
