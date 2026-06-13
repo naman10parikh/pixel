@@ -45,6 +45,9 @@ jobs:
         with:
           node-version: 22
           cache: pnpm
+      - name: Install a Playwright browser (so the §9 COMPONENT layer RUNS, not skips)
+        if: steps.rt.outputs.armed == 'true'
+        run: npx --yes playwright install --with-deps chromium
       - name: Install + build + test (red-blocking once code exists)
         if: steps.rt.outputs.armed == 'true'
         run: |
