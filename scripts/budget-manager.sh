@@ -25,7 +25,7 @@ SETTINGS_FILE="$PROJECT_DIR/.claude/settings.local.json"
 
 tier_name() {
   case "$1" in
-    1) echo "FULL POWER (CP123: Fable-5 1M main + Opus-4.8 1M subagents, max effort)" ;;
+    1) echo "FULL POWER (CP123: Fable-5 1M main + latest flagship Opus (Opus 5) 1M subagents, max effort)" ;;
     2) echo "BALANCED (opusplan + high effort)" ;;
     3) echo "CONSERVE (Sonnet + high effort)" ;;
     4) echo "EMERGENCY (Sonnet + medium effort)" ;;
@@ -53,7 +53,7 @@ tier_env_effort() {
 
 tier_env_subagent() {
   case "$1" in
-    1) echo "claude-opus-4-8[1m]" ;; # CP123: subagent default = Opus 4.8 1M (was "" inherit); revert at CP123 close
+    1) echo "claude-opus-5" ;; # CP123: subagent default = latest flagship Opus (Opus 5) 1M (was "" inherit); revert at CP123 close
     2) echo "sonnet" ;; # Sonnet subagents
     3) echo "haiku" ;;  # Haiku subagents
     4) echo "haiku" ;;  # Haiku subagents
