@@ -19,7 +19,7 @@ allowed-tools: Bash(npx impeccable:*), Read, Grep
 
 **The machine-detectable slop tells — BLOCK on sight (impeccable flags these deterministically):**
 1. **Pure/near-black** `#000`/`#09090b` → use **warm-black `#141312`** (O-HS1). Untinted black is a top slop tell.
-2. **Inter-for-everything** → pair a **serif display + sans body (Instrument Serif + Poppins)** (O-HS2/O-F6). Serif+sans is the single highest-impact anti-AI change. Inter is "the black t-shirt of fonts" (Mantz) — neutral-by-design, not safe-by-default.
+2. **Inter-for-everything** → pair a **serif display + sans body (Instrument Serif + Poppins)** (O-HS2/O-F6). **Chairman override, 11 October 2026: on every page he reads (a brain, a plan, a report, an approach page), no serif or stretched display face; it is [removed]'s look, Instrument Sans alone on light paper (`pixel-brain-page`). The pairing holds for product interfaces only.** Serif+sans is the single highest-impact anti-AI change. Inter is "the black t-shirt of fonts" (Mantz) — neutral-by-design, not safe-by-default.
 3. **AI purple/indigo (or purple→blue gradients)** → **warm-black + ONE non-purple OKLCH accent** (O-HS4/O-F1). This is NOT a taste choice the model makes — it's a training-data artifact: Wathan made every Tailwind UI button `bg-indigo-500`, it saturated the corpus, the model now emits it as "statistically correct." **O-F1 HARD-OVERRIDES energy `react.md`'s "Purple theme #6b21a8".**
 4. **Symmetric card grids** → **asymmetric / bento** (O-HS3). Symmetric = the AI pattern.
 5. **Cards-nested-in-cards, dark glows, bounce/elastic easing, a rounded-square icon tile above every heading** → all literal impeccable rules (O-HS4).

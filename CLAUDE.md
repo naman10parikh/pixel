@@ -64,6 +64,13 @@ setup → **badge** · payments → **penny** · deploy/CI → **rocket**. Also 
 generated UI, brief-less design, and stale patterns. pixel produces the web shell and names
 the owner — it never reaches across the seam to implement another vertical.
 
+## Pages the chairman reads
+
+Every HTML page he reads (a brain, a plan, a report, an approach page) takes [removed]'s brain look, not the house
+style: Instrument Sans alone, light paper, the contents on the left, sections that open on a click, figures in the
+page's own tokens, and no orphan page. His words of 11 October 2026: "I don't want to see these, like elongated font".
+Start from `skills/pixel-brain-page/template.html`; Energy holds the same rule in `.claude/rules/page-look.md`.
+
 ## Operating model
 
 Act, don't ask. Self-improve every session. **Test as a user** — "it compiles" means nothing;
