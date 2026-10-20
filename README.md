@@ -81,11 +81,42 @@ Codex, Cursor, OpenCode, GitHub Copilot and other agents read [AGENTS.md](AGENTS
 
 ## Quick start
 
-In one step, straight from GitHub:
+One real run, straight from GitHub, in an empty folder. It needs no API key; this run took 47 seconds.
+
+```bash
+npx -y -p github:naman10parikh/pixel pixel mock "a pricing page for Dr. Ana, a dentist who runs two clinics" --out ./pixel-demo
+```
+
+What it printed, shortened (the full paths cut to `./pixel-demo`):
+
+```
+pixel mock → ./pixel-demo  (discover → generate → gate → emit)
+[1/4] discover — 6-section brief + a named ICP
+pixel design: discovery brief written → ./pixel-demo/brief.md
+[3/4] gate — write the ICP-aware mockup + scaffold the app, then the ship gate
+  ✓ mockup written ./pixel-demo/mockup/index.html
+✓ Next 16 app scaffolded
+[4/4] emit — the ICP-aware mockup + scaffolded app under --out
+✓ pixel mock done — ICP "Dr. Ana" · mockup + scaffolded app → ./pixel-demo
+```
+
+It wrote three things into `./pixel-demo`: `brief.md`, the discovery brief built around the named person (the
+output calls that person the ICP, the ideal customer); `mockup/index.html`, a one-page mockup; and `app/`, a
+Next.js 16 app on Tailwind v4 and shadcn. It exits 0 only when the anti-slop gate passes. Step 2 skipped the
+optional v0 draft because no `V0_API_KEY` was set. Set `E2B_API_KEY` to run the gate inside an E2B sandbox.
+
+Every command, second:
 
 ```bash
 npx -y -p github:naman10parikh/pixel pixel --help
 ```
+
+**What the gate rejects.** Left: a typical AI-made draft of the same page, written by hand for this comparison.
+The gate's first step, `impeccable detect`, rejects it with 22 findings: low-contrast text (13), thin borders with
+wide shadows (3), gradient text (2), the overused Inter font, a skipped heading level, the purple palette AI tools
+reach for, and marketing buzzwords. Right: the mockup from the run above, which passes with 0 findings.
+
+![A purple, emoji-filled pricing page that the gate rejects, beside Pixel's warm-black mockup for Dr. Ana that passes](docs/before-after.png)
 
 From a clone:
 
@@ -97,33 +128,31 @@ node dist/cli.js mock "a fintech portfolio dashboard for Marcus, a hedge-fund PM
 pnpm test && npm run eval
 ```
 
-`mock` needs no API key. It writes the discovery brief with the named user (`brief.md`), the mockup
-(`mockup/index.html`) and a scaffolded app (`app/`), and exits 0 only when the anti-slop gate passes. Set `V0_API_KEY`
-to add a v0 first draft, and `E2B_API_KEY` to run the gate inside a sandbox. `pnpm link --global` puts the `pixel`
-command on your path, so every command below is also `pixel <cmd>`.
+`pnpm link --global` puts the `pixel` command on your path, so every command below is also `pixel <cmd>`.
 
 ## How it works
 
 `pixel mock` runs four steps and logs each one to `logs/runs.jsonl`:
 
-1. **Discover.** A six-section brief and a first, second and third hierarchy map, built around a named person. No
-   brief, no design.
+1. **Discover.** A six-section brief built around a named person, with a ranked list of what that person must see
+   first, second and third. No brief, no design.
 2. **Generate.** An optional v0 first draft, tagged untrusted. Without a key it skips straight to the scaffold.
-3. **Gate.** It writes the mockup, scaffolds a Next.js 16 app with `shadcn init` and the house tokens in Tailwind v4
-   `@theme`, then runs the ship gate.
+3. **Gate.** It writes the mockup, scaffolds a Next.js 16 app with `shadcn init` and Pixel's own design tokens (colours,
+   fonts and spacing) in Tailwind v4 `@theme`, then runs the ship gate.
 4. **Emit.** It reports the mockup and the app, and exits non-zero if the gate failed.
 
 The ship gate always runs in the same order: impeccable (anti-slop), axe, Lighthouse CI, the 12-dimension design
 audit, manual accessibility, security, and visual proof. `pixel audit` runs it on any app. `pixel verify` adds the
-silent-failure checks: a build, a screenshot, zero hydration warnings, and the §0 grep-set for stale Next.js and
+silent-failure checks: a build, a screenshot, zero hydration warnings, and a text search for outdated Next.js and
 Tailwind patterns.
 
-Each night a loop (`.github/workflows/rsi.yml`) checks the 15 pinned packages against npm and runs the L1 evals. A
+Each night a loop (`.github/workflows/rsi.yml`) checks the 15 pinned package versions against npm and runs the first level of evals
+(deterministic checks that need no key). A
 moved pin becomes a `BRAIN-DRIFT.md` proposal, kept as a run artifact for a person to review; the loop never edits
 the brain and never merges. A failing eval turns the run red.
 
-Its knowledge lives in `brain/`: the 8-job loop, 20 battle-tested scenarios, the known pitfalls, the opinions with
-their reasons, the open disputes and the tool matrix. `bash scripts/memory-search.sh "<query>"` and the
+Its knowledge lives in `brain/`: the eight jobs of frontend work from discovery to shipping, 20 real-world
+scenarios, the known pitfalls, the opinions with their reasons, the open disputes and the tool matrix. `bash scripts/memory-search.sh "<query>"` and the
 `pixel_brain_search` tool search it with BM25.
 
 - **CLI** (`pixel <cmd>`): `mock`, `scaffold`, `design`, `generate`, `audit`, `verify`, `migrate`, `cockpit`, `logs`.
@@ -133,15 +162,16 @@ their reasons, the open disputes and the tool matrix. `bash scripts/memory-searc
   build.
 - **Cockpit** (`pixel cockpit --port 7780`): a local page with the brain browser, the run log, eval scores,
   ask-the-employee and the mockup gallery.
-- **Skills and personas**: 7 skills written for pixel's own job (anti-slop, the ship gate, the RSC boundary,
-  animation, the Next 16 migration, agent UI, reading pages), 24 vendored design skills, and two sub-agents
+- **Skills and personas**: 7 skills written for pixel's own job (anti-slop, the ship gate, where React Server
+  Components meet client components, animation, the Next 16 migration, agent UI, reading pages), 24 design skills by
+  other authors (sources and licences in [CREDITS.md](CREDITS.md)), and two sub-agents
   (`pixel-taste-critic`, `pixel-migration-pilot`).
 
 Stack pins (npm-verified 2026-06-11): Next **16.2.9**, React **19.2.7**, Tailwind **4.3.0**, shadcn CLI **4.11.0**,
 Radix, Lucide, GSAP **3.15**, Motion **12.40**, Lenis **1.3.23**, impeccable **2.3.2**.
 
-Read first: [AGENTS.md](AGENTS.md) (what pixel does, its tools, what it refuses), [CLAUDE.md](CLAUDE.md) (the pins,
-the 8-job loop, the §0 grep-set), [`brain/MOC - pixel.md`](brain/MOC%20-%20pixel.md) (the six expertise files) and
+Read first: [AGENTS.md](AGENTS.md) (what pixel does, its tools, what it refuses), [CLAUDE.md](CLAUDE.md) (the pinned
+versions, the eight jobs and the stale-pattern search), [`brain/MOC - pixel.md`](brain/MOC%20-%20pixel.md) (the six expertise files) and
 [llms.txt](llms.txt) (the map of every surface).
 
 <!-- fleet:anatomy:start -->
