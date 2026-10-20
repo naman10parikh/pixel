@@ -1,0 +1,12 @@
+cff-version: 1.2.0
+message: If you use this software, please cite it as below.
+title: "Pixel: Frontend taste you can put in CI: it scaffolds Next.js 16 apps and blocks UI that looks AI-made."
+type: software
+authors:
+  - family-names: Parikh
+    given-names: Naman
+repository-code: "https://github.com/naman10parikh/pixel"
+license: MIT
+version: "0.1.0"
+abstract: "Frontend taste you can put in CI: it scaffolds Next.js 16 apps and blocks UI that looks AI-made."
+keywords: ["agent-native", "frontend", "nextjs", "design-systems"]
