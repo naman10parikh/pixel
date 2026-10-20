@@ -1,4 +1,3 @@
-<!-- source: davila7/claude-code-templates · MIT · vendored by Armory -->
 ---
 name: premium-web-design
 description: >
@@ -11,6 +10,7 @@ description: >
   dissatisfaction with typical AI-generated website aesthetics. Do NOT trigger for dashboards, admin panels, internal
   tools, or functional UI where aesthetics are secondary to utility — the standard frontend-design skill handles those.
 ---
+<!-- source: davila7/claude-code-templates · MIT · vendored by Armory -->
 
 # Premium Web Design
 

@@ -27,3 +27,20 @@ jobs:
             echo "RSI engine (workflows/rsi.workflow.js) not built yet (A24) — exiting green."; exit 0
           fi
           node workflows/rsi.workflow.js --check
+      - name: Pick up a fresh proposal (only when the loop rewrote BRAIN-DRIFT.md)
+        if: always()
+        run: |
+          if [ -f BRAIN-DRIFT.md ] && ! git diff --quiet -- BRAIN-DRIFT.md; then
+            cp BRAIN-DRIFT.md brain-drift-proposal.md
+            echo "new proposal written for review"
+          else
+            echo "no new proposal tonight"
+          fi
+      - name: Keep the proposal for review (never merged by the loop)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: brain-drift-proposal
+          path: brain-drift-proposal.md
+          if-no-files-found: ignore
+          retention-days: 30

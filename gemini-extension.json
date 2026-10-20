@@ -1,0 +1,17 @@
+{
+  "name": "pixel",
+  "version": "0.1.0",
+  "description": "Frontend taste you can put in CI: it scaffolds Next.js 16 apps and blocks UI that looks AI-made.",
+  "contextFileName": "GEMINI.md",
+  "mcpServers": {
+    "pixel": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "-p",
+        "github:naman10parikh/pixel",
+        "pixel-mcp"
+      ]
+    }
+  }
+}

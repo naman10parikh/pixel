@@ -1,4 +1,3 @@
-<!-- source: davila7/claude-code-templates · MIT · vendored by Armory -->
 ---
 name: shadcn
 description: Manages shadcn/ui components and projects, providing context, documentation, and usage patterns for building modern design systems.
@@ -7,6 +6,7 @@ risk: safe
 source: https://github.com/shadcn-ui/ui/tree/main/skills/shadcn
 date_added: "2026-03-07"
 ---
+<!-- source: davila7/claude-code-templates · MIT · vendored by Armory -->
 
 # shadcn/ui
 

@@ -110,7 +110,7 @@ export function buildMockupHtml(brief) {
     /* Asymmetric/bento hero (O-HS3): a 7/5 split, NOT a symmetric card wall. */
     header { display: grid; grid-template-columns: 1.4fr 1fr; gap: 3rem; align-items: end; padding-bottom: 3rem; border-bottom: 1px solid var(--base-6); }
     h1 { font-family: var(--font-display); font-weight: 500; font-size: clamp(2.6rem, 6vw, 4.4rem); line-height: 1.06; }
-    h1 em { color: var(--accent); font-style: italic; }
+    h1 em { color: var(--accent); font-style: normal; } /* roman: impeccable 4.7 flags an italic serif display headline as slop */
     .lede { color: var(--ink-dim); font-size: 1.05rem; max-width: 46ch; }
     .cta { display: inline-flex; align-items: center; gap: 0.5rem; margin-top: 1.4rem; padding: 0.7rem 1.3rem; border-radius: 10px; background: var(--accent); color: var(--base-1); font-weight: 600; text-decoration: none; transition: transform 0.18s var(--ease), filter 0.18s var(--ease); }
     .cta:hover { transform: translateY(-1px); filter: brightness(1.05); }

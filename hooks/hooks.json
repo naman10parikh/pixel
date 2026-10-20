@@ -1,0 +1,15 @@
+{
+  "description": "pixel's plugin hooks. SessionStart puts the stack pins and the operating discipline in context. The blocking §0 grep-set stays in this repo's own .claude/settings.json, because its rules assume a Next.js 16 project.",
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"${CLAUDE_PLUGIN_ROOT}/.claude/hooks/pixel-session-start.sh\""
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -16,6 +16,17 @@ Stack pins (npm-verified 2026-06-11): Next **16.2.9** · React **19.2.7** · Tai
 CLI **4.11.0** · Radix · Lucide · GSAP **3.15** · Motion **12.40** · Lenis **1.3.23** · impeccable
 **2.3.2**.
 
+## Install in one step
+
+```bash
+npx -y -p github:naman10parikh/pixel pixel --help          # the CLI
+npx -y -p github:naman10parikh/pixel pixel-mcp             # the MCP server (stdio)
+claude mcp add --transport stdio pixel -- npx -y -p github:naman10parikh/pixel pixel-mcp
+```
+
+In Claude Code, `/plugin install pixel --marketplace naman10parikh/pixel` brings the skills, the two personas, the
+SessionStart hook and the MCP server together.
+
 ## The hands — `pixel <cmd>` CLI
 
 ```
@@ -45,7 +56,9 @@ pixel --help | --version
 
 ## The MCP tools — `pixel-mcp` (JSON-RPC, mirrors the CLI verbs)
 
-Server: `node dist/mcp-server.js` (stdio, no live keys). Wired in `.mcp.json` as `pixel-mcp`.
+Bin: `pixel-mcp` (stdio, no keys). The root `.mcp.json` starts it straight from GitHub as `pixel`
+(`npx -y -p github:naman10parikh/pixel pixel-mcp`); `.mcp.dev.json` starts the local build (`node dist/mcp-server.js`)
+as `pixel-local`.
 
 - `pixel_mock(brief, out?)` — the flagship over MCP → `{mockup_path, app_path, gate_report}`.
 - `pixel_scaffold(dir, base?)` — clean Next 16 app.
@@ -79,15 +92,16 @@ Server: `node dist/mcp-server.js` (stdio, no live keys). Wired in `.mcp.json` as
 - `brain/TOOL-MATRIX.md` — default-vs-alt per concern + the §8 ecosystem watch (RSI fuel).
 
 Query it: `bash scripts/memory-search.sh "<query>"` (BM25 over `brain/`) or the `pixel_brain_search` MCP
-tool. The `obsidian` MCP is wired to `VAULT_PATH=./brain`.
+tool. In `.mcp.dev.json` the `obsidian` MCP is wired to `VAULT_PATH=./brain`.
 
 ## Self-improvement (RSI)
 
 pixel improves its own taste/currency nightly — `node workflows/rsi.workflow.js --check` re-verifies the
 pinned package versions (`npm view`), runs the L1 eval pyramid, and writes a `BRAIN-DRIFT.md` proposal if
-a floor moved. Deterministic + $0 today; the Claude half lights up when `CLAUDE_CODE_OAUTH_TOKEN` is set
-(see `CHAIRMAN-CHECKLIST.md`). `dsip.json` is the contract; `node scripts/darwin-check.mjs dsip.json`
-grades it ≥ L1.
+a floor moved. Deterministic + $0 today; the Claude half lights up when `CLAUDE_CODE_OAUTH_TOKEN` is set as a
+repository secret. `dsip.json` is the contract: `node scripts/darwin-check.mjs dsip.json` asserts the L1 floor
+(evals gate merges), and Darwin's conformance check grades the contract L2 (the nightly loop runs and keeps its
+`BRAIN-DRIFT.md` proposal as a run artifact for a person to review; it never merges).
 
 ## Acceptance test (the bar)
 

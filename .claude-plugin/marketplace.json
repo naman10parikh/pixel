@@ -1,0 +1,14 @@
+{
+  "name": "pixel",
+  "owner": {
+    "name": "Naman Parikh",
+    "url": "https://github.com/naman10parikh"
+  },
+  "plugins": [
+    {
+      "name": "pixel",
+      "source": "./",
+      "description": "Frontend taste you can put in CI: it scaffolds Next.js 16 apps and blocks UI that looks AI-made."
+    }
+  ]
+}

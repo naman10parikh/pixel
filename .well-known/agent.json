@@ -1,6 +1,7 @@
 {
   "name": "pixel",
   "description": "frontend-web designer-engineer — scaffolds, designs-to-taste, generates-then-gates, and verifies Next.js 16 / Tailwind v4 / shadcn UI; treats every generated UI as an untrusted draft and ships only what passes the anti-slop taste gate.",
+  "url": "https://github.com/naman10parikh/pixel",
   "version": "0.1.0",
   "provider": {
     "organization": "Energy",
@@ -11,13 +12,14 @@
     { "type": "mcp", "command": "node", "args": ["dist/mcp-server.js"], "transport": "stdio" },
     { "type": "http", "url": "http://localhost:7780", "note": "the localhost cockpit (pixel cockpit --port 7780)" }
   ],
-  "capabilities": ["mock", "scaffold", "design", "generate", "audit", "verify", "taste-check"],
+  "capabilities": { "streaming": false, "pushNotifications": false },
   "defaultInputModes": ["text/plain"],
   "defaultOutputModes": ["text/plain", "application/json"],
   "skills": [
     { "id": "mock", "name": "mock", "description": "Brief -> ICP-aware mockup + scaffolded Next 16 app, gated through the 7-step ship stack. The flagship.", "tags": ["frontend", "mockup", "nextjs"] },
     { "id": "scaffold", "name": "scaffold", "description": "Clean Next 16 app via shadcn init -t next --base radix; Tailwind v4 @theme house tokens.", "tags": ["frontend", "scaffold"] },
     { "id": "design", "name": "design", "description": "Discovery brief + FIRST/SECOND/THIRD hierarchy map. NO BRIEF = NO DESIGN.", "tags": ["design", "discovery"] },
+    { "id": "generate", "name": "generate", "description": "v0 Platform API first-pass draft. Untrusted until it passes pixel audit.", "tags": ["frontend", "draft"] },
     { "id": "audit", "name": "audit", "description": "The 7-step ship gate: impeccable -> axe -> lhci -> 12-dim -> manual-a11y -> security -> visual.", "tags": ["audit", "anti-slop", "a11y"] },
     { "id": "verify", "name": "verify", "description": "The silent-failure assertion set: §0 grep-set + build + screenshot + console=0-hydration.", "tags": ["verify"] },
     { "id": "taste-check", "name": "taste-check", "description": "impeccable + opinions over a code snippet — the cheapest 'is this slop?' call.", "tags": ["anti-slop", "taste"] }

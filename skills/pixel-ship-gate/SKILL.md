@@ -1,7 +1,7 @@
 ---
 name: pixel-ship-gate
 description: pixel's 7-step pre-merge ship gate (JOB-7). Use when asking "is this ready to merge / ship?" Encodes the gate IN ORDER (impeccable → axe → lhci → 12-dim → manual-a11y → security → visual), WCAG 2.2 AA (not 3.0), CWV 2026 (LCP 2.0s / INP 200ms / CLS 0.1), the +$1.2M CWV default-emit (S15), and the NEVER-an-a11y-overlay rule (S16, FTC-fined).
-trigger: "is this ready to merge"; "ship it"; pre-merge review; final QA on a UI; a11y / CWV / security sign-off; before calling any UI done
+trigger: asked "is this ready to merge" or "ship it"; pre-merge review; final QA on a UI; a11y / CWV / security sign-off; before calling any UI done
 allowed-tools: Bash(npx impeccable:*), Bash(npx playwright:*), Bash(npx lhci:*), Read, Grep
 ---
 

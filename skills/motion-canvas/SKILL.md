@@ -1,4 +1,3 @@
-<!-- source: davila7/claude-code-templates · MIT · vendored by Armory -->
 ---
 name: motion-canvas
 description: Complete production-ready guide for Motion Canvas with ESM/CommonJS workarounds, full setup templates, and troubleshooting for programmatic video creation using TypeScript
@@ -9,6 +8,7 @@ license: MIT
 tags: [Video, TypeScript, Animation, Motion Canvas, Signals, Generators, Canvas API, Vector, Audio Sync, Vite, ESM]
 dependencies: [@motion-canvas/core>=3.0.0, @motion-canvas/2d>=3.0.0, @motion-canvas/ui>=3.0.0, @motion-canvas/vite-plugin>=3.0.0]
 ---
+<!-- source: davila7/claude-code-templates · MIT · vendored by Armory -->
 
 # Motion Canvas - Production-Ready Video Creation with TypeScript
 

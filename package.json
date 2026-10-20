@@ -4,7 +4,8 @@
   "description": "The Energy fleet's frontend employee — scaffolds, designs-to-taste, generates-then-gates, and verifies Next.js 16 / Tailwind v4 / shadcn UI.",
   "type": "module",
   "bin": {
-    "pixel": "./dist/cli.js"
+    "pixel": "./dist/cli.js",
+    "pixel-mcp": "./dist/mcp-server.js"
   },
   "main": "./dist/cli.js",
   "types": "./dist/cli.d.ts",

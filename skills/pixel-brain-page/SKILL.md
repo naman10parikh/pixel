@@ -1,30 +1,30 @@
 ---
 name: pixel-brain-page
-description: The look of every HTML page the chairman reads, taken from [removed]'s brain. Use when making or restyling a brain or wiki page, an approach page, a plan, a report, a status page or any "where my mind is" page.
-trigger: making or restyling any HTML page, artifact, brain, wiki, report or plan he will read; "make it look like the [removed] brain"; "no elongated font"; "light background, contents on the left"
+description: The reading-page look for long documents people read, such as a brain or wiki page, an approach page, a plan, a report or a status page. Use when making or restyling one. One sans family, light paper, the contents on the left, the depth one click away.
+trigger: making or restyling an HTML page meant for reading, such as a brain, wiki, report, plan or status page; "no elongated font"; "light background, contents on the left"
 allowed-tools: Read, Write, Edit, Bash(npx -y playwright screenshot:*)
 ---
 
-# pixel-brain-page: [removed]'s brain look
+# pixel-brain-page: the reading-page look
 
-> **His words, 11 October 2026:** "I don't want to see these, like elongated font ... Look at the [removed] HTML brain
-> in the [removed] repo and follow all its formatting, font, the way it opens up, the way when you click more things
-> open up using progressive disclosure, the SVGs ... keep the styling the same, and encode that styling ... In fact
-> you can encode it in the Pixel repo, because that's responsible for front end as well."
+Long pages that people read need a calmer look than a product interface. This skill is that look: one sans family,
+light paper, the contents on the left, the answer on the page and the depth one click away. It overrides the house
+style (O-HS1 warm black, O-HS2 a serif display with a sans body) for reading pages only. Product interfaces keep the
+house style.
 
-This is a chairman override of the house style (O-HS1 warm black, O-HS2 a serif display with a sans body) for every
-page he reads. Product interfaces keep the house style until he says otherwise. Energy holds the same rule at its
-root: `energy/.claude/rules/page-look.md`.
+Why: a stretched display face and a dark page tire a reader on a long document. A contents rail and sections that
+open on a click let the reader find the answer first and the evidence second. Readers asked for this look in
+October 2026, after calling a serif title "elongated".
 
 ## trigger
 
-- any HTML page he will read: a brain or wiki page, an approach page, a plan, a report, a status page
-- restyling a page he called stretched, elongated, dark or orphaned
+- any HTML page meant for reading: a brain or wiki page, an approach page, a plan, a report, a status page
+- restyling a page a reader called stretched, elongated, dark or orphaned
 
 ## The look
 
 - **One family:** Instrument Sans for titles, headings, body and figures. No serif display face, no condensed or
-  stretched face (Instrument Serif is the one he called elongated), no monospace in prose.
+  stretched face (Instrument Serif reads as elongated at title sizes), no monospace in prose.
 - **Title:** weight 400, `clamp(2.5rem, 5vw, 3.5rem)`, line height 1.02, letter spacing -0.03em.
 - **Scale:** 56, 42, 27, 19, 16, 14 and 11 px; section headings at weight 600; labels 11px in capitals with 0.14em
   tracking; body 16px on 1.62.
@@ -46,10 +46,11 @@ root: `energy/.claude/rules/page-look.md`.
 2. Put the answer in each section's lead and first paragraph; move the depth into `details.deeper`.
 3. Draw each figure with the `d-` classes in the template, to scale.
 4. Link the page from its brain (its folder's README or index) and keep the crumbs pointing home.
-5. Check before showing him: search for "Serif" (none), no dark palette, screenshots at 1280 and 390 read, no
+5. Check before you share it: search for "Serif" (none), no dark palette, screenshots at 1280 and 390 read, no
    sideways scroll on the page itself.
 
-## The source
+## Where it came from
 
-[removed], read only: `[removed]/[removed]/the-play/assets/style.css` and `[removed]/latest/the-[removed]-play.html`.
-First use: talent-intel's `career/opportunities/reflection-ai/thesis-v2-approach.html` (11 October 2026).
+Distilled from a long strategy document read on screen: a contents rail, about 150 sections that open on a click and
+about 50 inline figures. `template.html` beside this file is the distilled version. First used on an approach page in
+October 2026.

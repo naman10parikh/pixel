@@ -1,8 +1,8 @@
-<!-- source: davila7/claude-code-templates · MIT · vendored by Armory -->
 ---
 name: feature-design-assistant
 description: "Turn ideas into fully formed designs and specs through natural collaborative dialogue. Use when planning new features, designing architecture, or making significant changes to the codebase."
 ---
+<!-- source: davila7/claude-code-templates · MIT · vendored by Armory -->
 
 # Feature Design Assistant
 

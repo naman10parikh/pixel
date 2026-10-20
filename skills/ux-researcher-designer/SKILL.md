@@ -1,8 +1,8 @@
-<!-- source: davila7/claude-code-templates · MIT · vendored by Armory -->
 ---
 name: ux-researcher-designer
 description: UX research and design toolkit for Senior UX Designer/Researcher including data-driven persona generation, journey mapping, usability testing frameworks, and research synthesis. Use for user research, persona creation, journey mapping, and design validation.
 ---
+<!-- source: davila7/claude-code-templates · MIT · vendored by Armory -->
 
 # UX Researcher & Designer
 

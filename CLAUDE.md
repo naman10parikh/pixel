@@ -1,3 +1,5 @@
+@AGENTS.md
+
 # pixel — Frontend Employee (Agent-Native Harness)
 
 > One repo = one recursively self-improving agent-native harness. Energy is the control
@@ -7,13 +9,8 @@
 
 ## What this is
 
-pixel is the Energy fleet's **frontend employee** — a highly opinionated web
-designer-engineer that scaffolds clean Next.js apps, designs them to a house taste, generates
-first-pass drafts, and gates everything through an executable anti-slop + a11y + CWV + 12-dim
-ship stack. **Every generated UI is an untrusted draft** (~40–45% of v0/Lovable/Bolt output
-is vulnerable, OPINIONS O7) — it is a draft until the ship gate passes. pixel's moat is **the
-audit/taste gates, not the generator**: that is why it is a harness and not a v0 wrapper. The
-flagship is `pixel mock "<brief>"` → an ICP-aware mockup + a scaffolded Next 16 app, gated.
+`AGENTS.md` (imported above) says what pixel does, its tools and what it refuses. This file adds what Claude Code
+needs to work inside this repository: the pins, the loop, the hooks and the MCP setup.
 
 ## Stack pins (npm-verified 2026-06-11 — currency is the agent's #1 failure mode, O1)
 
@@ -23,7 +20,7 @@ Lenis **1.3.23** · impeccable **2.3.2** · @lhci/cli **0.15.1** · @axe-core/pl
 Tokens go in Tailwind v4 `@theme` (CSS-first), NOT `tailwind.config.js` (O8). Scaffold via
 `shadcn init -t next --base radix` — **scaffold, never fork** a stale starter (O10).
 
-## The 8-job loop (execution order — full table in PLAN §2 / brain/EXPERTISE-MAP)
+## The 8-job loop (execution order — full table in brain/EXPERTISE-MAP)
 
 1. **J1 Discover** — ICP as a *named person*; 6-section brief + FIRST/SECOND/THIRD hierarchy
    map. **NO BRIEF = NO DESIGN** (O11).
@@ -64,12 +61,20 @@ setup → **badge** · payments → **penny** · deploy/CI → **rocket**. Also 
 generated UI, brief-less design, and stale patterns. pixel produces the web shell and names
 the owner — it never reaches across the seam to implement another vertical.
 
-## Pages the chairman reads
+## Pages people read
 
-Every HTML page he reads (a brain, a plan, a report, an approach page) takes [removed]'s brain look, not the house
-style: Instrument Sans alone, light paper, the contents on the left, sections that open on a click, figures in the
-page's own tokens, and no orphan page. His words of 11 October 2026: "I don't want to see these, like elongated font".
-Start from `skills/pixel-brain-page/template.html`; Energy holds the same rule in `.claude/rules/page-look.md`.
+Every long HTML page meant for reading (a brain, a plan, a report, an approach page) takes the reading-page look, not
+the house style: Instrument Sans alone, light paper, the contents on the left, sections that open on a click, figures
+in the page's own tokens, and no orphan page. A stretched display title is the most common complaint. Start from
+`skills/pixel-brain-page/template.html` (the `pixel-brain-page` skill).
+
+## MCP servers
+
+The root `.mcp.json` is what a stranger and the plugin load: pixel's own server (started from GitHub with
+`npx -y -p github:naman10parikh/pixel pixel-mcp`) plus context7, next-devtools and shadcn, none of which needs a
+secret. To work on pixel itself, `claude --mcp-config .mcp.dev.json` also loads the local build (`pixel-local`,
+`node dist/mcp-server.js`, after `pnpm build`), GitHub (needs `GITHUB_PERSONAL_ACCESS_TOKEN` in the environment),
+memory (`identity/MEMORY.md`) and obsidian (`brain/`).
 
 ## Operating model
 

@@ -6,7 +6,7 @@
 #
 # Wired in .claude/settings.json under hooks.SessionStart.
 # Deliberately NOT the energy session-start-context.sh (that is hardcoded to
-# ~/energy + globs dirs/`pnpm --filter @energy/web` that don't exist
+# the energy repo's absolute path + globs dirs/`pnpm --filter @energy/web` that don't exist
 # here — it would error under `set -euo pipefail`). This is pixel-native.
 
 PROJECT_DIR="${CLAUDE_PROJECT_DIR:-$(cd "$(dirname "$0")/../.." && pwd)}"

@@ -1,4 +1,3 @@
-<!-- source: davila7/claude-code-templates · MIT · vendored by Armory -->
 ---
 name: design-system-starter
 description: Create and evolve design systems with design tokens, component architecture, accessibility guidelines, and documentation templates. Ensures consistent, scalable, and accessible UI across products.
@@ -7,6 +6,7 @@ metadata:
   version: 1.0.0
   tags: [design-system, ui, components, design-tokens, accessibility, frontend]
 ---
+<!-- source: davila7/claude-code-templates · MIT · vendored by Armory -->
 
 # Design System Starter
 

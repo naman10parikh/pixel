@@ -1,8 +1,8 @@
-<!-- source: davila7/claude-code-templates · MIT · vendored by Armory -->
 ---
 name: design-to-code
 description: Pixel-perfect Figma to React conversion using coderio. Generates production-ready code (TypeScript, Vite, TailwindCSS V4) with high visual fidelity. Features robust error handling, checkpoint recovery, and streamlined execution via helper script.
 ---
+<!-- source: davila7/claude-code-templates · MIT · vendored by Armory -->
 
 # Design to Code
 
