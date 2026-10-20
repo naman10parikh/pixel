@@ -13,6 +13,9 @@
     "dist/",
     "skills/",
     "brain/",
+    "scripts/memory-search.sh",
+    "src/cockpit/",
+    "eval/",
     "AGENTS.md",
     "README.md",
     "LICENSE"
