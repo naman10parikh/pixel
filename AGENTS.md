@@ -100,8 +100,9 @@ pixel improves its own taste/currency nightly — `node workflows/rsi.workflow.j
 pinned package versions (`npm view`), runs the L1 eval pyramid, and writes a `BRAIN-DRIFT.md` proposal if
 a floor moved. Deterministic + $0 today; the Claude half lights up when `CLAUDE_CODE_OAUTH_TOKEN` is set as a
 repository secret. `dsip.json` is the contract: `node scripts/darwin-check.mjs dsip.json` asserts the L1 floor
-(evals gate merges), and Darwin's conformance check grades the contract L2 (the nightly loop runs and keeps its
-`BRAIN-DRIFT.md` proposal as a run artifact for a person to review; it never merges).
+(evals gate merges), and Darwin's conformance check grades the contract L2 (the nightly loop runs, keeps its
+`BRAIN-DRIFT.md` proposal as a run artifact and posts it as one open issue labelled `proposal` for a person to
+review; it never merges).
 
 ## Acceptance test (the bar)
 
