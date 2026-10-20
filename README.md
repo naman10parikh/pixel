@@ -5,7 +5,9 @@
 
 **Frontend taste you can put in CI: it scaffolds Next.js 16 apps and blocks UI that looks AI-made.**
 
-Pixel is an agent-native, recursively self-improving agent employee whose job is frontend. Coding agents use it through its skills, its MCP server and its command line. It improves itself through its own evals and a scheduled improvement loop, and a person reviews every change.
+Pixel is an agent employee, a packaged specialist agent with its own skills, memory and tests. It owns one job: frontend. Coding agents use it through its skills, its MCP server and its command line. A scheduled job runs its evals and proposes fixes. A person makes every change.
+
+_Pixel is part of an agent-native play for agent-native systems that can eventually be recursively self-improving and evolving, operated by agent employees._
 
 [AGENTS.md](AGENTS.md) · [llms.txt](llms.txt) · [Skills](skills/) · [Security](SECURITY.md) · [Contributing](CONTRIBUTING.md) · [All projects](https://github.com/naman10parikh)
 <!-- fleet:header:end -->
@@ -25,6 +27,8 @@ plus a 12-dimension design audit), not the generator.
 /plugin marketplace add naman10parikh/pixel
 /plugin install pixel@pixel
 ```
+
+<details><summary>Its MCP server, Codex, Cursor, Gemini CLI, one skill and the command line</summary>
 
 **Its MCP server**, in any MCP client:
 
@@ -69,6 +73,8 @@ git clone --depth 1 https://github.com/naman10parikh/pixel /tmp/pixel && cp -r /
 ```bash
 npx -y -p github:naman10parikh/pixel pixel --help
 ```
+
+</details>
 
 Codex, Cursor, OpenCode, GitHub Copilot and other agents read [AGENTS.md](AGENTS.md); Claude Code reads [CLAUDE.md](CLAUDE.md) and Gemini CLI reads [GEMINI.md](GEMINI.md), which import it. [llms.txt](llms.txt) maps every surface for agents that read first.
 <!-- fleet:use:end -->
@@ -156,7 +162,7 @@ Every project in this fleet is graded on the same 11 harness components and on s
 | Evals | ✅ | .github/workflows/ci.yml:65 |
 | Observability | ✅ | src/lib/logger.ts:3 |
 | Sandbox/Infra | ✅ | src/lib/sandbox.ts:154 |
-| RSI / open-endedness | ✅ | dsip.json:27 |
+| Self-improvement | ✅ | dsip.json:27 |
 
 ✅ real and tested · 🟡 partial, with the reason in the row · ❌ absent
 <!-- fleet:anatomy:end -->
@@ -166,19 +172,19 @@ A recursively self-improving, agent-native harness, built on the Energy harness 
 <!-- fleet:footer:start -->
 ## How it improves itself
 
-It carries its own evals and a self-improvement contract, [`dsip.json`](dsip.json) (level L2). A scheduled loop runs the evals and writes what it would change as a proposal. A person reviews every proposal, and none that lowers a score is accepted. Lessons it learns are kept as rules in its memory files.
+It carries its own evals and a self-improvement contract, [`dsip.json`](dsip.json), which says what it may change and how a change is judged. A scheduled job runs its evals and proposes fixes. A person makes every change. Lessons it learns are kept as rules in its memory files.
 
 ## Part of a fleet
 
-One of the agent-native open-source projects by [Naman Parikh](https://github.com/naman10parikh): agent-native systems, operated by agent employees, built to improve and evolve themselves. Each one owns one part of an agent's harness or of the product around it.
+One of the projects by [Naman Parikh](https://github.com/naman10parikh). Each owns one part of an agent's harness, or of the product around an agent, and all of them follow one standard.
 
 Siblings: [agentdial](https://github.com/naman10parikh/agentdial) (identity) · [wikimem](https://github.com/naman10parikh/wikimem) (memory) · [skillsmith](https://github.com/naman10parikh/skillsmith) (skills) · [agent-booster](https://github.com/naman10parikh/agent-booster) (tools / CLIs) · [armory](https://github.com/naman10parikh/armory) (MCPs and the component registry) · [agentgrid](https://github.com/naman10parikh/agentgrid) (dispatch) · [agentswarm](https://github.com/naman10parikh/agentswarm) (dispatch) · [agentbench](https://github.com/naman10parikh/agentbench) (evals) · [agentmoney](https://github.com/naman10parikh/agentmoney) (observability) · [claude-harness](https://github.com/naman10parikh/claude-harness) (the whole harness, as a template).
 
 ## Contributing and security
 
-Read [CONTRIBUTING.md](CONTRIBUTING.md); AI-assisted pull requests are welcome. Report a vulnerability privately, as [SECURITY.md](SECURITY.md) explains.
+Read [CONTRIBUTING.md](CONTRIBUTING.md). AI-assisted pull requests are welcome. Report a vulnerability privately, as [SECURITY.md](SECURITY.md) explains.
 
 ## License
 
-MIT, © 2026 Naman Parikh. See [LICENSE](LICENSE).
+MIT, © 2026 Naman Parikh. See [LICENSE](LICENSE) and [NOTICE](NOTICE).
 <!-- fleet:footer:end -->
