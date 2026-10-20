@@ -1,16 +1,30 @@
 # pixel
 
-> The Energy fleet's frontend web designer-engineer. A highly opinionated harness that scaffolds,
-> designs-to-taste, generates-then-gates, and verifies Next.js 16 / Tailwind v4 / shadcn UI. It treats
-> every generated UI as an untrusted draft and ships only what survives the taste gates. The moat is the
-> audit/taste gate (`impeccable detect` + design-systems DFS), not the generator.
-> Tool-employee: surfaces are the CLI, the `pixel-mcp` MCP server, and the local cockpit. Read `brain/` first.
+> Frontend taste you can put in CI: an agent employee that scaffolds Next.js 16 apps and blocks UI that looks AI-made.
+
+pixel is the Energy fleet's frontend web designer-engineer: a highly opinionated harness that scaffolds,
+designs-to-taste, generates-then-gates, and verifies Next.js 16 / Tailwind v4 / shadcn UI. It treats every generated
+UI as an untrusted draft and ships only what survives the taste gates. The moat is the audit/taste gate
+(`impeccable detect` + the design-systems 12-dimension audit), not the generator. Its surfaces are the CLI, the
+`pixel-mcp` MCP server, the skills, two sub-agents, a Claude Code plugin, a Gemini CLI extension and the local cockpit.
+Read `brain/` first.
 
 ## Agent docs
 
 - [AGENTS.md](AGENTS.md): what pixel does, the full `pixel <cmd>` tool list, the MCP tools, the REFUSES boundary, "read brain/ first".
 - [CLAUDE.md](CLAUDE.md): pixel's operating doc — stack pins, the 8-job loop, the §0 grep-set discipline, the untrusted-draft rule, commit convention.
 - [brain/MOC - pixel.md](brain/MOC%20-%20pixel.md): the brain hub — wikilinks to every expertise note.
+- [GEMINI.md](GEMINI.md): Gemini CLI's context file; it imports AGENTS.md.
+- [README.md](README.md): what pixel is, the one-step install for every coding agent, the quick start.
+
+## Identity and memory
+
+- [identity/SOUL.md](identity/SOUL.md): who pixel is, its voice, what it refuses.
+- [identity/BRAND.md](identity/BRAND.md): why the name, the colours.
+- [identity/HEARTBEAT.md](identity/HEARTBEAT.md): what pixel checks on its own, how often, and what it does when a check fails.
+- [identity/MEMORY.md](identity/MEMORY.md): the bootstrap facts (under 2,000 tokens).
+- [memory/LEARNINGS.md](memory/LEARNINGS.md): corrections that became rules.
+- [scripts/memory-search.sh](scripts/memory-search.sh): BM25 search over `brain/`.
 
 ## CLI (the hands — `pixel <cmd>`)
 
@@ -24,7 +38,9 @@
 - `pixel cockpit [--port 7780]`: serve the localhost cockpit (brain browser · run log · eval scores · ask-the-employee · mockup gallery).
 - `pixel logs [--last N]`: aggregate `logs/runs.jsonl` (cost/latency/gate-results per run).
 
-## MCP server (`pixel-mcp` — JSON-RPC over stdio; `node dist/mcp-server.js`; wired in `.mcp.json`)
+## MCP server (`pixel-mcp` — JSON-RPC over stdio)
+
+- [src/mcp-server.ts](src/mcp-server.ts): the server. Start it with `npx -y -p github:naman10parikh/pixel pixel-mcp`; [.mcp.json](.mcp.json) does that for you, and [.mcp.dev.json](.mcp.dev.json) starts the local build.
 
 - `pixel_mock(brief, out?)`: the flagship over MCP → `{mockup_path, app_path, gate_report}`.
 - `pixel_scaffold(dir, base?)`: clean Next 16 app.
@@ -42,6 +58,9 @@
 - [skills/pixel-animate/SKILL.md](skills/pixel-animate/SKILL.md): the lowest-layer animation ladder + the Lenis+GSAP one-rAF recipe (`autoRaf:false`, S5) + `LazyMotion`+`m` (O5).
 - [skills/pixel-migrate-next16/SKILL.md](skills/pixel-migrate-next16/SKILL.md): the §0 grep-set + S1 (`middleware.ts`→`proxy.ts`) + S17 + S18 + codemod-then-grep (O13).
 - [skills/pixel-ship-gate/SKILL.md](skills/pixel-ship-gate/SKILL.md): the 7-step ship gate + WCAG 2.2 AA + CWV 2026 (LCP 2.0s/INP 200ms/CLS 0.1) + S15/S16.
+- [skills/pixel-agent-ui/SKILL.md](skills/pixel-agent-ui/SKILL.md): designing screens where people work with AI agents (rosters, chats, watch-it-work panels, memory views).
+- [skills/pixel-brain-page/SKILL.md](skills/pixel-brain-page/SKILL.md): the reading-page look for long documents (one sans family, light paper, contents on the left, depth one click away).
+- [skills/](skills/): 24 more vendored design skills (shadcn, Tailwind, accessibility, Figma-to-code and others), each crediting its source.
 
 ## Sub-agents (fresh-context personas — `.claude/agents/`)
 
@@ -63,5 +82,9 @@
 
 ## Optional
 
-- [.claude-plugin/manifest.json](.claude-plugin/manifest.json): the Claude Code plugin bundle (skills + MCP + CLI + hooks + the 2 personas). `claude plugin install pixel`.
-- [.well-known/agent.json](.well-known/agent.json): the A2A agent card (capabilities incl. `mock`/`audit`).
+- [.claude-plugin/plugin.json](.claude-plugin/plugin.json) and [.claude-plugin/marketplace.json](.claude-plugin/marketplace.json): the Claude Code plugin (skills, the 2 personas, the SessionStart hook, the MCP server). `/plugin install pixel --marketplace naman10parikh/pixel`.
+- [hooks/hooks.json](hooks/hooks.json): the plugin's hook; [.claude/settings.json](.claude/settings.json) holds this repo's own hooks, including the blocking §0 grep-set.
+- [gemini-extension.json](gemini-extension.json): the Gemini CLI extension. `gemini extensions install https://github.com/naman10parikh/pixel`.
+- [.well-known/agent.json](.well-known/agent.json): the A2A agent card (skills incl. `mock`/`audit`).
+- [dsip.json](dsip.json): the self-improvement contract; [workflows/rsi.workflow.js](workflows/rsi.workflow.js) is the nightly loop.
+- [SECURITY.md](SECURITY.md), [CONTRIBUTING.md](CONTRIBUTING.md), [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md), [LICENSE](LICENSE) (MIT).
