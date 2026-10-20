@@ -87,4 +87,4 @@ edits (Karpathy: minimum diff, touch only what the task names).
 
 Conventional commits — `feat(skill):` · `feat(employee):` · `feat(company):` ·
 `feat(pixel):` · `fix(...)` · `docs(...)` — so git snap-back works at all 3 granularities.
-Trailer: `Co-Authored-By: Claude Fable 5 (1M context) <noreply@anthropic.com>`.
+Trailer: the `Co-Authored-By` line Claude Code gives for the model that wrote the commit.
