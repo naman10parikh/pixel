@@ -1,0 +1,11 @@
+# pixel's gitleaks baseline: every upstream rule, plus one narrow allowlist entry.
+#
+# The Figma skill quotes Figma file keys (the ID in a Figma file's URL). They are identifiers, not credentials, but
+# they look like generic API keys to the scanner.
+
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Figma file keys quoted in the Figma skill, not credentials"
+paths = ['''skills/figma-implement-design/SKILL\.md$''']
