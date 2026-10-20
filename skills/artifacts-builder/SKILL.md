@@ -3,7 +3,7 @@ name: artifacts-builder
 description: Suite of tools for creating elaborate, multi-component claude.ai HTML artifacts using modern frontend web technologies (React, Tailwind CSS, shadcn/ui). Use for complex artifacts requiring state management, routing, or shadcn/ui components - not for simple single-file HTML/JSX artifacts.
 license: Complete terms in LICENSE.txt
 ---
-<!-- source: davila7/claude-code-templates · MIT · vendored by Armory -->
+<!-- source: anthropics/skills (web-artifacts-builder), via davila7/claude-code-templates · Apache-2.0, see LICENSE.txt · vendored by Armory; see CREDITS.md -->
 
 # Artifacts Builder
 
