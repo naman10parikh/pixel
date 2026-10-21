@@ -20,7 +20,7 @@ Pixel is an agent employee, a packaged specialist agent with its own skills, mem
 
 _Pixel is part of an agent-native play for agent-native systems that can eventually be recursively self-improving and evolving, operated by agent employees._
 
-<p align="center"><img alt="Pixel: on the command line" src="assets/terminal.svg" width="880"></p>
+<p align="center"><img alt="Pixel: a real task, run offline" src="assets/demo.svg" width="880"></p>
 <!-- fleet:header:end -->
 
 Pixel is a frontend designer-engineer for coding agents. Give it a one-line product brief and it hands back a
